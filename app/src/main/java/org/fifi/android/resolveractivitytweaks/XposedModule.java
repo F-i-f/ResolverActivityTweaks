@@ -56,10 +56,12 @@ public class XposedModule implements IXposedHookLoadPackage {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (isEnabled() && (Boolean)mFilterLastUsedField.get(param.thisObject)) {
                             mFilterLastUsedField.set(param.thisObject, false);
-                            List mList = (List) mListField.get(param.thisObject);
+                            @SuppressWarnings("unchecked")
+                            List<Object> mList = (List<Object>) mListField.get(param.thisObject);
                             int mLastChosenPosition = (Integer) mLastChosenPositionField.get(param.thisObject);
                             if (mLastChosenPosition > 0) {
                                 Object t = mList.get(0);
+                                //noinspection
                                 mList.set(0, mList.get(mLastChosenPosition));
                                 mList.set(mLastChosenPosition, t);
                             }

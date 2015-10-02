@@ -27,6 +27,10 @@ import java.util.List;
  */
 public class RATSettings extends PreferenceActivity {
 
+    public RATSettings() {
+        // Empty
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -76,7 +80,7 @@ public class RATSettings extends PreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private class ReflectInDescriptionPrefChangeListener implements Preference.OnPreferenceChangeListener {
+    private static class ReflectInDescriptionPrefChangeListener implements Preference.OnPreferenceChangeListener {
         private int mOnDescrResId;
         private int mOffDescrResId;
 
@@ -99,7 +103,7 @@ public class RATSettings extends PreferenceActivity {
         }
     }
 
-    private class ToggleHideOnceAlwaysListener extends ReflectInDescriptionPrefChangeListener {
+    private static class ToggleHideOnceAlwaysListener extends ReflectInDescriptionPrefChangeListener {
         private Preference mDependentPreference;
 
         public ToggleHideOnceAlwaysListener(int onDescrResId, int offDescrResId, Preference dependentPreference) {
@@ -123,15 +127,25 @@ public class RATSettings extends PreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class GeneralPreferenceFragment extends PreferenceFragment {
+
+        public GeneralPreferenceFragment() {
+            // Empty
+        }
+
+        @SuppressWarnings("deprecation")
+        private void makePrefWorldReadable(PreferenceManager prefMgr) {
+            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
-            //noinspection deprecation
-            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+            makePrefWorldReadable(prefMgr);
+
             addPreferencesFromResource(R.xml.pref_general);
 
             Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
@@ -150,14 +164,15 @@ public class RATSettings extends PreferenceActivity {
             ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object value) {
-                    PackageManager pm = getPackageManager();
+                    RATSettings activity = (RATSettings)getActivity();
+                    PackageManager pm = activity.getPackageManager();
                     int val;
                     if ((Boolean)value) {
                         val = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
                     } else {
                         val = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
                     }
-                    pm.setComponentEnabledSetting(new ComponentName(RATSettings.this, Const.PACKAGE_NAME+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
+                    pm.setComponentEnabledSetting(new ComponentName(activity, Const.PACKAGE_NAME+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
                     return super.onPreferenceChange(preference, value);
                 }
             };
