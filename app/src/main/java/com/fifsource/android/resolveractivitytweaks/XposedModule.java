@@ -1,4 +1,4 @@
-package org.fifi.android.resolveractivitytweaks;
+package com.fifsource.android.resolveractivitytweaks;
 
 /**
  * Created by phil on 9/30/15.

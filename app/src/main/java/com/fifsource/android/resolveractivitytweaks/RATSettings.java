@@ -1,4 +1,4 @@
-package org.fifi.android.resolveractivitytweaks;
+package com.fifsource.android.resolveractivitytweaks;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
