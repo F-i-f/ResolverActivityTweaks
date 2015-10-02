@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="rat_enable"
+        android:title="@string/rat_enable_title"
+        android:summary="@string/rat_enable_description_off"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="rat_hideOnceAlways"
+        android:title="@string/rat_hideAlwaysOnce_title"
+        android:summary="@string/rat_hideAlwaysOnce_description_off"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="rat_showLauncherIcon"
+        android:title="@string/rat_showLauncher_title"
+        android:summary="@string/rat_showLauncher_description_on"
+        android:defaultValue="true" />
+
+    <Preference
+        android:key="rat_copyright"
+        android:title="@string/rat_copyright_title"
+        android:summary="@string/rat_copyright_description" />
+
+</PreferenceScreen>
