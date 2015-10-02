@@ -43,7 +43,7 @@ public class XposedModule implements IXposedHookLoadPackage {
     }
 
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-        mXprefs = new XSharedPreferences(Const.PACKAGE_NAME, Const.PREFERENCES_NAME);
+        mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
         mXprefs.makeWorldReadable();
 
         final Class rlaClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ResolveListAdapter", lpparam.classLoader);

@@ -148,6 +148,9 @@ public class RATSettings extends PreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_general);
 
+            Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
+            ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME + " ("+BuildConfig.VERSION_CODE+")");
+
             Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
             Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
             ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
@@ -172,7 +175,7 @@ public class RATSettings extends PreferenceActivity {
                     } else {
                         val = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
                     }
-                    pm.setComponentEnabledSetting(new ComponentName(activity, Const.PACKAGE_NAME+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
+                    pm.setComponentEnabledSetting(new ComponentName(activity, BuildConfig.APPLICATION_ID+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
                     return super.onPreferenceChange(preference, value);
                 }
             };
