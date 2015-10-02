@@ -166,10 +166,9 @@ public class RATSettings extends PreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     try {
-                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.xda_support_thread_link)));
-                        startActivity(myIntent);
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.xda_support_thread_link))));
                     } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, "Browser not found.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, activity.getString(R.string.rat_error_browser_not_found), Toast.LENGTH_LONG).show();
                     }
                     return true;
                 }
@@ -199,7 +198,11 @@ public class RATSettings extends PreferenceActivity {
                     public boolean onPreferenceClick(Preference preference) {
                         Uri packageURI = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
                         Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-                        startActivity(uninstallIntent);
+                        try {
+                            startActivity(uninstallIntent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity, activity.getString(R.string.rat_error_pm_not_found), Toast.LENGTH_LONG).show();
+                        }
                         return true;
                     }
                 });
@@ -208,6 +211,21 @@ public class RATSettings extends PreferenceActivity {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_LAUNCHER));
+
+                Preference activateModulePref = findPreference(Const.PREF_RAT_XPOSEDINACT_ACTIVATE);
+                activateModulePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        try {
+                            Intent intent = new Intent(activity.getString(R.string.xposed_installer_open_section_intent));
+                            intent.putExtra("section", "modules");
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity, activity.getString(R.string.rat_error_xposed_installer_not_found), Toast.LENGTH_LONG).show();
+                        }
+                        return true;
+                    }
+                });
 
             } else if (!activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));

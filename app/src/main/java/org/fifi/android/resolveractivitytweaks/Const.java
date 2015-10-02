@@ -11,6 +11,7 @@ public class Const {
     public static final String  PREF_RAT_CATEGORY_NOXPOSED = "rat_category_noxposed";
     public static final String  PREF_RAT_NOXPOSED_UNINSTALL = "rat_noxposed_uninstall";
     public static final String  PREF_RAT_CATEGORY_XPOSEDINACT = "rat_category_xposedinact";
+    public static final String  PREF_RAT_XPOSEDINACT_ACTIVATE = "rat_xposedinact_activate";
     public static final String  PREF_RAT_CATEGORY_XPOSEDMISMATCH = "rat_category_xposedmismatch";
     public static final String  PREF_RAT_CATEGORY_XPOSED = "rat_category_xposed";
     public static final String  PREF_RAT_ENABLE = "rat_enable";
