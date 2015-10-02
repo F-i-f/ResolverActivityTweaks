@@ -1,4 +1,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="rat_copyright"
+        android:title="@string/rat_copyright_title"
+        android:summary="@string/rat_copyright_description" />
+
+    <PreferenceCategory
+        android:title="@string/rat_category_xposed" />
 
     <CheckBoxPreference
         android:key="rat_enable"
@@ -12,15 +19,13 @@
         android:summary="@string/rat_hideAlwaysOnce_description_off"
         android:defaultValue="false" />
 
+    <PreferenceCategory
+        android:title="@string/rat_category_launcher" />
+
     <CheckBoxPreference
         android:key="rat_showLauncherIcon"
         android:title="@string/rat_showLauncher_title"
         android:summary="@string/rat_showLauncher_description_on"
         android:defaultValue="true" />
-
-    <Preference
-        android:key="rat_copyright"
-        android:title="@string/rat_copyright_title"
-        android:summary="@string/rat_copyright_description" />
 
 </PreferenceScreen>

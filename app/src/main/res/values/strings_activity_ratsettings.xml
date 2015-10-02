@@ -1,8 +1,11 @@
 <resources>
-    <string name="title_activity_ratsettings">Resolver Activity Tweaks</string>
+    <string name="title_activity_ratsettings">@string/app_name</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
+
+    <string name="rat_category_xposed">Xposed Module</string>
+    <string name="rat_category_launcher">Launcher</string>
 
     <string name="rat_enable_title">Enable</string>
     <string name="rat_enable_description_on">Always use the "Open With…" dialog, even when a preferred app has been selected.</string>
@@ -16,6 +19,6 @@
     <string name="rat_showLauncher_description_on">The launcher icon for "Resolver Activity Tweaks" will be shown.</string>
     <string name="rat_showLauncher_description_off">The launcher icon for Resolver Activity Tweaks" will be hidden.  This application can still be launched from the "Xposed Installer".</string>
 
-    <string name="rat_copyright_title"></string>
+    <string name="rat_copyright_title">@string/title_activity_ratsettings</string>
     <string name="rat_copyright_description">Copyright © 2015 Philippe Troin &lt;phil@fifi.org&gt;</string>
 </resources>
