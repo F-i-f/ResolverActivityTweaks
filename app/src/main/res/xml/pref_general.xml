@@ -84,4 +84,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="Legal" >
+
+        <Preference
+            android:title="@string/rat_warranty_disclaimer_title"
+            android:summary="@string/rat_warranty_disclaimer_summary" />
+
+        <Preference
+            android:title="@string/rat_liability_disclaimer_title"
+            android:summary="@string/rat_liability_disclaimer_summary" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
