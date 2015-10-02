@@ -1,17 +1,25 @@
 package org.fifi.android.resolveractivitytweaks;
 
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +34,8 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class RATSettings extends PreferenceActivity {
+
+    public String mBuildCodeFromXposed = null;
 
     public RATSettings() {
         // Empty
@@ -142,6 +152,8 @@ public class RATSettings extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+            final RATSettings activity = (RATSettings) getActivity();
+
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
             makePrefWorldReadable(prefMgr);
@@ -149,38 +161,101 @@ public class RATSettings extends PreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
 
             Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
-            ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME + " ("+BuildConfig.VERSION_CODE+")");
-
-            Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
-            Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
-            ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
-            ratEnabledPref.setOnPreferenceChangeListener(thoal);
-            boolean enableVal = PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
-            thoal.setDescriptionString(ratEnabledPref, enableVal);
-            thoal.setDependentPreference(enableVal);
-
-            ReflectInDescriptionPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
-            hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
-            hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
-
-            Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
-            ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
+            ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME);
+            ratCopyright.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
-                public boolean onPreferenceChange(Preference preference, Object value) {
-                    RATSettings activity = (RATSettings)getActivity();
-                    PackageManager pm = activity.getPackageManager();
-                    int val;
-                    if ((Boolean)value) {
-                        val = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-                    } else {
-                        val = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+                public boolean onPreferenceClick(Preference preference) {
+                    try {
+                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.xda_support_thread_link)));
+                        startActivity(myIntent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(activity, "Browser not found.", Toast.LENGTH_LONG).show();
                     }
-                    pm.setComponentEnabledSetting(new ComponentName(activity, BuildConfig.APPLICATION_ID+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
-                    return super.onPreferenceChange(preference, value);
+                    return true;
                 }
-            };
-            showInLauncherPref.setOnPreferenceChangeListener(showInLauncherPrefChangeListener);
-            showInLauncherPrefChangeListener.setDescriptionString(showInLauncherPref, showInLauncherPref.getSharedPreferences().getBoolean(Const.PREF_RAT_SHOW_LAUNCHER_ICON, Const.PREF_RAT_SHOW_LAUNCHER_ICON_DEFAULT));
+            });
+
+            Preference ratBuildCode = findPreference(Const.PREF_RAT_BUILD_CODE);
+            ratBuildCode.setSummary(BuildConfig.RANDOM_BUILD_CODE);
+
+            PackageManager pm = activity.getPackageManager();
+            PackageInfo pkg = null;
+            try {
+                pkg = pm.getPackageInfo(Const.XPOSED_INSTALLER_PACKAGE_NAME, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                // Nothing
+            }
+            ArrayList<Preference> sectionsToRemove = new ArrayList<Preference>();
+
+            if (pkg == null) {
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_LAUNCHER));
+
+                Preference uninstallPref = findPreference(Const.PREF_RAT_NOXPOSED_UNINSTALL);
+                uninstallPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Uri packageURI = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+                        startActivity(uninstallIntent);
+                        return true;
+                    }
+                });
+            } else if (activity.mBuildCodeFromXposed == null) {
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_LAUNCHER));
+
+            } else if (!activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_LAUNCHER));
+
+            } else {
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
+
+                Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
+                Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
+                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
+                ratEnabledPref.setOnPreferenceChangeListener(thoal);
+                boolean enableVal = PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+                thoal.setDescriptionString(ratEnabledPref, enableVal);
+                thoal.setDependentPreference(enableVal);
+
+                ReflectInDescriptionPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
+                hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
+                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
+
+                Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
+                ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object value) {
+                        RATSettings activity = (RATSettings)getActivity();
+                        PackageManager pm = activity.getPackageManager();
+                        int val;
+                        if ((Boolean)value) {
+                            val = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+                        } else {
+                            val = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+                        }
+                        pm.setComponentEnabledSetting(new ComponentName(activity, BuildConfig.APPLICATION_ID+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
+                        return super.onPreferenceChange(preference, value);
+                    }
+                };
+                showInLauncherPref.setOnPreferenceChangeListener(showInLauncherPrefChangeListener);
+                showInLauncherPrefChangeListener.setDescriptionString(showInLauncherPref, showInLauncherPref.getSharedPreferences().getBoolean(Const.PREF_RAT_SHOW_LAUNCHER_ICON, Const.PREF_RAT_SHOW_LAUNCHER_ICON_DEFAULT));
+
+            }
+            PreferenceScreen screen = getPreferenceScreen();
+            for (Iterator<Preference> i = sectionsToRemove.iterator(); i.hasNext();) {
+                screen.removePreference(i.next());
+            }
         }
     }
 }

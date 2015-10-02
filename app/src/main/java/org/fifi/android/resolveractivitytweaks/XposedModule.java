@@ -43,6 +43,19 @@ public class XposedModule implements IXposedHookLoadPackage {
     }
 
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+
+        if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            final Class prefActivityClass = XposedHelpers.findClass(BuildConfig.APPLICATION_ID+".RATSettings", lpparam.classLoader);
+            final Field mBuildCodeFromXposed = XposedHelpers.findField(prefActivityClass, "mBuildCodeFromXposed");
+            XposedBridge.hookAllConstructors(prefActivityClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    mBuildCodeFromXposed.set(param.thisObject, BuildConfig.RANDOM_BUILD_CODE);
+                }
+            });
+        }
+
         mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
         mXprefs.makeWorldReadable();
 

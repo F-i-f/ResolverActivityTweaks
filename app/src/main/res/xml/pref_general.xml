@@ -5,27 +5,83 @@
         android:summary="@string/rat_copyright_description" />
 
     <PreferenceCategory
-        android:title="@string/rat_category_xposed" />
+        android:key="rat_category_noxposed"
+        android:title="@string/rat_noxposed_title">
 
-    <CheckBoxPreference
-        android:key="rat_enable"
-        android:title="@string/rat_enable_title"
-        android:summary="@string/rat_enable_description_off"
-        android:defaultValue="false" />
+        <Preference
+            android:key="rat_noxposed_summary"
+            android:summary="@string/rat_noxposed_summary"
+            android:selectable="false" />
 
-    <CheckBoxPreference
-        android:key="rat_hideOnceAlways"
-        android:title="@string/rat_hideAlwaysOnce_title"
-        android:summary="@string/rat_hideAlwaysOnce_description_off"
-        android:defaultValue="false" />
+        <Preference
+            android:key="rat_noxposed_uninstall"
+            android:title="@string/rat_noxposed_uninstall" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/rat_category_launcher" />
+        android:key="rat_category_xposedinact"
+        android:title="@string/rat_category_xposedinact" >
 
-    <CheckBoxPreference
-        android:key="rat_showLauncherIcon"
-        android:title="@string/rat_showLauncher_title"
-        android:summary="@string/rat_showLauncher_description_on"
-        android:defaultValue="true" />
+        <Preference
+            android:key="rat_xposedinact_summary"
+            android:summary="@string/rat_xposedinact_summary"
+            android:selectable="false" />
+
+        <Preference
+            android:key="rat_xposedinact_activate"
+            android:title="@string/rat_xposedinact_activate" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="rat_category_xposedmismatch"
+        android:title="@string/rat_xposedmismatch_title" >
+
+        <Preference
+            android:summary="@string/rat_xposedmismatch_summary"
+            android:selectable="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="rat_category_xposed"
+        android:title="@string/rat_category_xposed" >
+
+        <CheckBoxPreference
+            android:key="rat_enable"
+            android:title="@string/rat_enable_title"
+            android:summary="@string/rat_enable_description_off"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="rat_hideOnceAlways"
+            android:title="@string/rat_hideAlwaysOnce_title"
+            android:summary="@string/rat_hideAlwaysOnce_description_off"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="rat_category_launcher"
+        android:title="@string/rat_category_launcher" >
+
+        <CheckBoxPreference
+            android:key="rat_showLauncherIcon"
+            android:title="@string/rat_showLauncher_title"
+            android:summary="@string/rat_showLauncher_description_on"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/rat_category_debug" >
+
+        <Preference
+            android:key="rat_build_code"
+            android:title="@string/rat_build_code"
+            android:selectable="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

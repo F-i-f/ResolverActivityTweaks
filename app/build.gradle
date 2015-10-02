@@ -8,8 +8,11 @@ android {
         applicationId "org.fifi.android.resolveractivitytweaks"
         minSdkVersion 22
         targetSdkVersion 23
-        versionCode 1
+        def VERSIONCODE = 1
+        versionCode VERSIONCODE
         versionName "0.1"
+        def RANDOM_BUILD_CODE = "\""+VERSIONCODE+"/"+String.format("%X", new Random().nextLong())+"\""
+        buildConfigField "String", "RANDOM_BUILD_CODE", RANDOM_BUILD_CODE
     }
     buildTypes {
         release {

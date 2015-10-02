@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Resolver Activity Tweaks</string>
     <string name="xposed_description">Change the way the Resolver Activity works: allows one-click operation, hide the Always/Once buttons, etc.</string>
+    <string name="xda_support_thread_link">http://www.xda-developpers.com/</string>
 </resources>
