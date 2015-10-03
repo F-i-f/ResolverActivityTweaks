@@ -93,12 +93,14 @@ public class XposedModule implements IXposedHookLoadPackage {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (isEnabled() && shouldHideAlwaysOnce()) {
                             Button mAlwaysButton = (Button) mAlwaysButtonField.get(param.thisObject);
+                            if (mAlwaysButton != null) {
+                                mAlwaysButton.setVisibility(View.GONE);
+                            }
+
                             Button mOnceButton = (Button) mOnceButtonField.get(param.thisObject);
-                            mAlwaysButton.setVisibility(View.GONE);
-                            mOnceButton.setVisibility(View.GONE);
-                            //ListView listView = (ListView) XposedHelpers.findField(klass, "mListView").get(param.thisObject);
-                            //ArrayList<ListView.FixedViewInfo> listViewInfo = (ArrayList<ListView.FixedViewInfo>) XposedHelpers.findField(ListView.class, "mHeaderViewInfos").get(listView);
-                            //listViewInfo.get(0).isSelectable = true;
+                            if (mOnceButton != null) {
+                                mOnceButton.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }
