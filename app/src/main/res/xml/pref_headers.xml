@@ -3,7 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="org.fifi.android.resolveractivitytweaks.RATSettings$GeneralPreferenceFragment"
+        android:fragment="com.fifsource.android.resolveractivitytweaks.RATSettings$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
 </preference-headers>
