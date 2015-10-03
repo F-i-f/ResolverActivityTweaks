@@ -8,9 +8,9 @@ android {
         applicationId "com.fifsource.android.resolveractivitytweaks"
         minSdkVersion 22
         targetSdkVersion 23
-        def VERSIONCODE = 2
+        def VERSIONCODE = 3
         versionCode VERSIONCODE
-        versionName "0.1.1"
+        versionName "0.2"
         def RANDOM_BUILD_CODE = "\""+VERSIONCODE+"/"+String.format("%X", new Random().nextLong())+"\""
         buildConfigField "String", "RANDOM_BUILD_CODE", RANDOM_BUILD_CODE
     }
