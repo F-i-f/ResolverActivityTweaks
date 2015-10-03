@@ -242,13 +242,13 @@ public class RATSettings extends PreferenceActivity {
                 Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
                 ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
                 ratEnabledPref.setOnPreferenceChangeListener(thoal);
-                boolean enableVal = PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+                boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
                 thoal.setDescriptionString(ratEnabledPref, enableVal);
                 thoal.setDependentPreference(enableVal);
 
                 ReflectInDescriptionPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
                 hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
-                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, PreferenceManager.getDefaultSharedPreferences(ratEnabledPref.getContext()).getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
+                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
 
                 Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
                 ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
