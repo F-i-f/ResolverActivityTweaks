@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.fifsource.android.resolveractivitytweaks"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 23
         def VERSIONCODE = 3
         versionCode VERSIONCODE
