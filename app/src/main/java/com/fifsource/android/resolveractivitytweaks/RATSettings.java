@@ -167,7 +167,7 @@ public class RATSettings extends PreferenceActivity {
 
             }
 
-             addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_general);
 
             Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
             ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME);
@@ -195,7 +195,7 @@ public class RATSettings extends PreferenceActivity {
             }
             ArrayList<Preference> sectionsToRemove = new ArrayList<Preference>();
 
-            if (false && pkg == null) {
+            if (pkg == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -215,7 +215,7 @@ public class RATSettings extends PreferenceActivity {
                         return true;
                     }
                 });
-            } else if (false && activity.mBuildCodeFromXposed == null) {
+            } else if (activity.mBuildCodeFromXposed == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -236,7 +236,7 @@ public class RATSettings extends PreferenceActivity {
                     }
                 });
 
-            } else if (false && !activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
+            } else if (!activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
