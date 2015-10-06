@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -157,8 +158,16 @@ public class RATSettings extends PreferenceActivity {
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
             makePrefWorldReadable(prefMgr);
+            SharedPreferences sharedPrefs = prefMgr.getSharedPreferences();
+            if (sharedPrefs.contains(Const.PREF_RAT_COMPACT_OLD_NAME)) {
+                SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+                sharedPrefsEditor.putBoolean(Const.PREF_RAT_COMPACT, sharedPrefs.getBoolean(Const.PREF_RAT_COMPACT_OLD_NAME, false));
+                sharedPrefsEditor.remove(Const.PREF_RAT_COMPACT_OLD_NAME);
+                sharedPrefsEditor.commit();
 
-            addPreferencesFromResource(R.xml.pref_general);
+            }
+
+             addPreferencesFromResource(R.xml.pref_general);
 
             Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
             ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME);
@@ -186,7 +195,7 @@ public class RATSettings extends PreferenceActivity {
             }
             ArrayList<Preference> sectionsToRemove = new ArrayList<Preference>();
 
-            if (pkg == null) {
+            if (false && pkg == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -206,7 +215,7 @@ public class RATSettings extends PreferenceActivity {
                         return true;
                     }
                 });
-            } else if (activity.mBuildCodeFromXposed == null) {
+            } else if (false && activity.mBuildCodeFromXposed == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -227,7 +236,7 @@ public class RATSettings extends PreferenceActivity {
                     }
                 });
 
-            } else if (!activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
+            } else if (false && !activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -238,17 +247,17 @@ public class RATSettings extends PreferenceActivity {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
 
-                Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
+                Preference ratCompactPref = findPreference(Const.PREF_RAT_COMPACT);
                 Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
-                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
-                ratEnabledPref.setOnPreferenceChangeListener(thoal);
-                boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
-                thoal.setDescriptionString(ratEnabledPref, enableVal);
-                thoal.setDependentPreference(enableVal);
+                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_compact_description_on, R.string.rat_compact_description_off, hideOnceAlwaysPref);
+                ratCompactPref.setOnPreferenceChangeListener(thoal);
+                boolean compactVal = ratCompactPref.getSharedPreferences().getBoolean(Const.PREF_RAT_COMPACT, Const.PREF_RAT_COMPACT_DEFAULT);
+                thoal.setDescriptionString(ratCompactPref, compactVal);
+                thoal.setDependentPreference(compactVal);
 
                 ReflectInDescriptionPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
                 hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
-                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
+                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratCompactPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
 
                 Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
                 ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {

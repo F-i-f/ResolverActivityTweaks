@@ -7,9 +7,9 @@
     <string name="rat_category_xposed">Xposed Module</string>
     <string name="rat_category_launcher">Launcher</string>
 
-    <string name="rat_enable_title">Enable</string>
-    <string name="rat_enable_description_on">Always use the "Open With…" dialog, even when a preferred app has been selected.</string>
-    <string name="rat_enable_description_off">The "Open With…" dialog only shows up the first time (Lollipop default).</string>
+    <string name="rat_compact_title">Compact Layout</string>
+    <string name="rat_compact_description_on">Always use the "Open With…" dialog, even when a preferred app has been selected.</string>
+    <string name="rat_compact_description_off">The "Open With…" dialog only shows up the first time (Lollipop default).</string>
 
     <string name="rat_hideAlwaysOnce_title">Hide Once/Always Buttons</string>
     <string name="rat_hideAlwaysOnce_description_on">Also remove the Once/Always buttons, and select the app with a single click.</string>
