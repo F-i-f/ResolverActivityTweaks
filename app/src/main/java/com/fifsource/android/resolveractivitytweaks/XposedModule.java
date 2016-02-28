@@ -32,15 +32,9 @@ public class XposedModule implements IXposedHookLoadPackage {
         }
     }
 
-    public boolean isCompact() {
+    public boolean isEnabled() {
         reloadPrefs();
-        String prefName;
-        if (mXprefs.contains(Const.PREF_RAT_COMPACT_OLD_NAME)) {
-            prefName = Const.PREF_RAT_COMPACT_OLD_NAME;
-        } else {
-            prefName = Const.PREF_RAT_COMPACT;
-        }
-        return mXprefs.getBoolean(prefName, Const.PREF_RAT_COMPACT_DEFAULT);
+        return mXprefs.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
     }
 
     public boolean shouldHideAlwaysOnce() {
@@ -73,7 +67,7 @@ public class XposedModule implements IXposedHookLoadPackage {
         XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(rlaClass, "rebuildList"), new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (isCompact() && (Boolean)mFilterLastUsedField.get(param.thisObject)) {
+                        if (isEnabled() && (Boolean)mFilterLastUsedField.get(param.thisObject)) {
                             mFilterLastUsedField.set(param.thisObject, false);
                             @SuppressWarnings("unchecked")
                             List<Object> mList = (List<Object>) mListField.get(param.thisObject);
@@ -97,7 +91,7 @@ public class XposedModule implements IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (isCompact() && shouldHideAlwaysOnce()) {
+                        if (isEnabled() && shouldHideAlwaysOnce()) {
                             Button mAlwaysButton = (Button) mAlwaysButtonField.get(param.thisObject);
                             if (mAlwaysButton != null) {
                                 mAlwaysButton.setVisibility(View.GONE);
@@ -119,7 +113,7 @@ public class XposedModule implements IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (isCompact() && shouldHideAlwaysOnce()) {
+                        if (isEnabled() && shouldHideAlwaysOnce()) {
                             mLastSelectedField.set(param.thisObject,
                                     ((ListView) mListViewField.get(param.thisObject)).getCheckedItemPosition());
 

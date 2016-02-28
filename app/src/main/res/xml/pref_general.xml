@@ -49,9 +49,9 @@
         android:title="@string/rat_category_xposed" >
 
         <CheckBoxPreference
-            android:key="rat_compact"
-            android:title="@string/rat_compact_title"
-            android:summary="@string/rat_compact_description_off"
+            android:key="rat_enable"
+            android:title="@string/rat_enable_title"
+            android:summary="@string/rat_enable_description_off"
             android:defaultValue="false" />
 
         <CheckBoxPreference

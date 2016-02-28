@@ -14,9 +14,8 @@ public class Const {
     public static final String  PREF_RAT_XPOSEDINACT_ACTIVATE = "rat_xposedinact_activate";
     public static final String  PREF_RAT_CATEGORY_XPOSEDMISMATCH = "rat_category_xposedmismatch";
     public static final String  PREF_RAT_CATEGORY_XPOSED = "rat_category_xposed";
-    public static final String  PREF_RAT_COMPACT_OLD_NAME = "rat_enable";
-    public static final String  PREF_RAT_COMPACT = "rat_compact";
-    public static final boolean PREF_RAT_COMPACT_DEFAULT = false;
+    public static final String  PREF_RAT_ENABLE = "rat_enable";
+    public static final boolean PREF_RAT_ENABLE_DEFAULT = false;
     public static final String  PREF_RAT_HIDE_ONCE_ALWAYS = "rat_hideOnceAlways";
     public static final boolean PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT = false;
     public static final String  PREF_RAT_CATEGORY_LAUNCHER = "rat_category_launcher";

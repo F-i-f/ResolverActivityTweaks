@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -158,14 +157,6 @@ public class RATSettings extends PreferenceActivity {
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
             makePrefWorldReadable(prefMgr);
-            SharedPreferences sharedPrefs = prefMgr.getSharedPreferences();
-            if (sharedPrefs.contains(Const.PREF_RAT_COMPACT_OLD_NAME)) {
-                SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-                sharedPrefsEditor.putBoolean(Const.PREF_RAT_COMPACT, sharedPrefs.getBoolean(Const.PREF_RAT_COMPACT_OLD_NAME, false));
-                sharedPrefsEditor.remove(Const.PREF_RAT_COMPACT_OLD_NAME);
-                sharedPrefsEditor.commit();
-
-            }
 
             addPreferencesFromResource(R.xml.pref_general);
 
@@ -247,17 +238,17 @@ public class RATSettings extends PreferenceActivity {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
 
-                Preference ratCompactPref = findPreference(Const.PREF_RAT_COMPACT);
+                Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
                 Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
-                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_compact_description_on, R.string.rat_compact_description_off, hideOnceAlwaysPref);
-                ratCompactPref.setOnPreferenceChangeListener(thoal);
-                boolean compactVal = ratCompactPref.getSharedPreferences().getBoolean(Const.PREF_RAT_COMPACT, Const.PREF_RAT_COMPACT_DEFAULT);
-                thoal.setDescriptionString(ratCompactPref, compactVal);
-                thoal.setDependentPreference(compactVal);
+                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
+                ratEnabledPref.setOnPreferenceChangeListener(thoal);
+                boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+                thoal.setDescriptionString(ratEnabledPref, enableVal);
+                thoal.setDependentPreference(enableVal);
 
                 ReflectInDescriptionPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
                 hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
-                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratCompactPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
+                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
 
                 Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
                 ReflectInDescriptionPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
