@@ -6,6 +6,9 @@ package com.fifsource.android.resolveractivitytweaks;
 public class Const {
     public static final String XPOSED_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
+    public static final String  GLOBAL_SETTING_ACTIVE           = "resolveractivitytweaks_active";
+    public static final String  GLOBAL_SETTING_HIDE_ONCE_ALWAYS = "resolveractivitytweaks_hide_once_always";
+
     public static final String  PREFERENCES_NAME = "prefs";
     public static final String  PREF_RAT_COPYRIGHT = "rat_copyright";
     public static final String  PREF_RAT_CATEGORY_NOXPOSED = "rat_category_noxposed";
