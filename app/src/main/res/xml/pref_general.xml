@@ -89,11 +89,13 @@
 
         <Preference
             android:title="@string/rat_warranty_disclaimer_title"
-            android:summary="@string/rat_warranty_disclaimer_summary" />
+            android:summary="@string/rat_warranty_disclaimer_summary"
+            android:selectable="false" />
 
         <Preference
             android:title="@string/rat_liability_disclaimer_title"
-            android:summary="@string/rat_liability_disclaimer_summary" />
+            android:summary="@string/rat_liability_disclaimer_summary"
+            android:selectable="false" />
 
     </PreferenceCategory>
 
