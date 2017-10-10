@@ -16,28 +16,39 @@ import java.lang.CharSequence;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import android.app.AndroidAppHelper;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class XposedModule implements IXposedHookLoadPackage {
+public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteInit {
+
+    private XSharedPreferences mXprefs;
+
+    private void reloadPrefs() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                && mXprefs.hasFileChanged()) {
+            mXprefs.reload();
+        }
+    }
 
     public boolean isEnabled() {
-        Context context = (Context) AndroidAppHelper.currentApplication();
-        return Settings.Secure.getInt(context.getContentResolver(), Const.GLOBAL_SETTING_ACTIVE, 0) != 0;
+        reloadPrefs();
+        return mXprefs.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
     }
 
     public boolean shouldHideAlwaysOnce() {
-        Context context = (Context) AndroidAppHelper.currentApplication();
-        return Settings.Secure.getInt(context.getContentResolver(), Const.GLOBAL_SETTING_HIDE_ONCE_ALWAYS, 0) != 0;
+        reloadPrefs();
+        return mXprefs.getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
+    }
+
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
+        mXprefs.makeWorldReadable();
     }
 
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
