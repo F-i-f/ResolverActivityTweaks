@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -18,6 +19,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -88,19 +90,18 @@ public class RATSettings extends PreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
-    /**
+
+    /*
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
     private static class ReflectInDescriptionBooleanPrefChangeListener implements Preference.OnPreferenceChangeListener {
         private Activity mActivity;
-        private boolean mDelayedAfterReboot;
         private int mOnDescrResId;
         private int mOffDescrResId;
 
-        public ReflectInDescriptionBooleanPrefChangeListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId) {
+        public ReflectInDescriptionBooleanPrefChangeListener(Activity activity, int onDescrResId, int offDescrResId) {
             mActivity = activity;
-            mDelayedAfterReboot = delayedAfterReboot;
             mOnDescrResId = onDescrResId;
             mOffDescrResId = offDescrResId;
         }
@@ -108,17 +109,32 @@ public class RATSettings extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             setDescriptionString(preference, value);
-            if (mDelayedAfterReboot && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Toast.makeText(mActivity, mActivity.getString(R.string.rat_warning_setting_delayed_after_reboot), Toast.LENGTH_SHORT).show();
-            }
             return true;
         }
+
         public void setDescriptionString(Preference preference, Object value) {
             if ((Boolean) value) {
                 preference.setSummary(mOnDescrResId);
             } else {
                 preference.setSummary(mOffDescrResId);
             }
+        }
+    }
+
+    private static class ReflectInDescriptionBooleanGlobalSettingsNamePrefChangeListener extends ReflectInDescriptionBooleanPrefChangeListener {
+        private String mPreferenceName;
+        private ContentResolver mContentResolver;
+
+        public ReflectInDescriptionBooleanGlobalSettingsNamePrefChangeListener(Activity activity, String preferenceName, int onDescrResId, int offDescrResId) {
+            super(activity, onDescrResId, offDescrResId);
+            this.mPreferenceName = preferenceName;
+            this.mContentResolver = activity.getContentResolver();
+        }
+
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            boolean ret = super.onPreferenceChange(preference, value);
+            Settings.Global.putInt(mContentResolver, this.mPreferenceName, (int)value);
+            return ret;
         }
     }
 
@@ -148,25 +164,6 @@ public class RATSettings extends PreferenceActivity {
                     return;
                 }
             }
-        }
-    }
-
-    private static class ToggleHideOnceAlwaysListener extends ReflectInDescriptionBooleanPrefChangeListener {
-        private Preference mDependentPreference;
-
-        public ToggleHideOnceAlwaysListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId, Preference dependentPreference) {
-            super(activity, delayedAfterReboot, onDescrResId, offDescrResId);
-            mDependentPreference = dependentPreference;
-        }
-
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            setDependentPreference((Boolean)value);
-            return super.onPreferenceChange(preference, value);
-        }
-
-        public void setDependentPreference(boolean value) {
-            mDependentPreference.setEnabled(value);
         }
     }
 
@@ -243,7 +240,7 @@ public class RATSettings extends PreferenceActivity {
                         return true;
                     }
                 });
-            } else if (activity.mBuildCodeFromXposed == null) {
+            } /* else if (activity.mBuildCodeFromXposed == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -258,7 +255,12 @@ public class RATSettings extends PreferenceActivity {
                             intent.putExtra("section", "modules");
                             startActivity(intent);
                         } catch (ActivityNotFoundException e) {
-                            Toast.makeText(activity, activity.getString(R.string.rat_error_xposed_installer_not_found), Toast.LENGTH_LONG).show();
+                            try {
+                                Intent intent = new Intent("de.robv.android.xposed.installer");
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e2) {
+                                Toast.makeText(activity, activity.getString(R.string.rat_error_xposed_installer_not_found), Toast.LENGTH_LONG).show();
+                            }
                         }
                         return true;
                     }
@@ -270,25 +272,41 @@ public class RATSettings extends PreferenceActivity {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_LAUNCHER));
 
-            } else {
+            } */ else if (Settings.System.canWrite(getContext())) {
+
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
 
-                Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
-                Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
-                ToggleHideOnceAlwaysListener thoal = new ToggleHideOnceAlwaysListener(activity, true, R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
-                ratEnabledPref.setOnPreferenceChangeListener(thoal);
-                boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
-                thoal.setDescriptionString(ratEnabledPref, enableVal);
-                thoal.setDependentPreference(enableVal);
+                final ContentResolver contentResolver = getActivity().getContentResolver();
 
-                ReflectInDescriptionBooleanPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(activity, true, R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
+                Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
+                ReflectInDescriptionBooleanPrefChangeListener enableChangeListener = new ReflectInDescriptionBooleanGlobalSettingsNamePrefChangeListener(activity, Const.GLOBAL_SETTING_ACTIVE, R.string.rat_enable_description_on, R.string.rat_enable_description_off);
+                ratEnabledPref.setOnPreferenceChangeListener(enableChangeListener);
+                String enabledStatusStr = Settings.Global.getString(contentResolver, Const.GLOBAL_SETTING_ACTIVE);
+                if (enabledStatusStr == null || enabledStatusStr.length() == 0) {
+                    boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+                    Settings.System.putString(contentResolver, Const.GLOBAL_SETTING_ACTIVE, Boolean.toString(enableVal));
+                    enableChangeListener.setDescriptionString(ratEnabledPref, enableVal);
+                } else {
+                    enableChangeListener.onPreferenceChange(ratEnabledPref, Integer.parseInt(enabledStatusStr));
+                }
+
+
+                Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
+                ReflectInDescriptionBooleanPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionBooleanGlobalSettingsNamePrefChangeListener(activity, Const.GLOBAL_SETTING_HIDE_ONCE_ALWAYS, R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
                 hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
-                hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
+                String hideOnceAlwaysStatusStr = Settings.Global.getString(contentResolver, Const.GLOBAL_SETTING_HIDE_ONCE_ALWAYS);
+                if (hideOnceAlwaysStatusStr == null || hideOnceAlwaysStatusStr.length() == 0) {
+                    boolean hideOnceAlwaysVal = hideOnceAlwaysPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
+                    Settings.Secure.putString(contentResolver, Const.GLOBAL_SETTING_HIDE_ONCE_ALWAYS, Boolean.toString(hideOnceAlwaysVal));
+                    hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, hideOnceAlwaysVal);
+                } else {
+                    hideOnceAlwaysChangeListener.onPreferenceChange(hideOnceAlwaysPref, Integer.parseInt(hideOnceAlwaysStatusStr));
+                }
 
                 Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
-                ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(activity, false, R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
+                ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(activity, R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object value) {
                         RATSettings activity = (RATSettings)getActivity();
@@ -306,6 +324,11 @@ public class RATSettings extends PreferenceActivity {
                 showInLauncherPref.setOnPreferenceChangeListener(showInLauncherPrefChangeListener);
                 showInLauncherPrefChangeListener.setDescriptionString(showInLauncherPref, showInLauncherPref.getSharedPreferences().getBoolean(Const.PREF_RAT_SHOW_LAUNCHER_ICON, Const.PREF_RAT_SHOW_LAUNCHER_ICON_DEFAULT));
 
+            } else {
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
             PreferenceScreen screen = getPreferenceScreen();
             for (Iterator<Preference> i = sectionsToRemove.iterator(); i.hasNext();) {
