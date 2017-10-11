@@ -5,6 +5,7 @@ package com.fifsource.android.resolveractivitytweaks;
  */
 public class Const {
     public static final String XPOSED_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
+    public static final String XPOSED_INSTALLER_OPEN_SECTION = XPOSED_INSTALLER_PACKAGE_NAME + ".OPEN_SECTION";
 
     public static final String  PREFERENCES_NAME = "prefs";
     public static final String  PREF_RAT_COPYRIGHT = "rat_copyright";
