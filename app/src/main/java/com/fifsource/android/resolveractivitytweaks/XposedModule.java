@@ -47,6 +47,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
     }
 
     public void initZygote(StartupParam startupParam) throws Throwable {
+        XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + ")");
         mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
         mXprefs.makeWorldReadable();
     }
