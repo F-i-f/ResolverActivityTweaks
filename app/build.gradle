@@ -7,10 +7,10 @@ android {
     defaultConfig {
         applicationId "com.fifsource.android.resolveractivitytweaks"
         minSdkVersion 21
-        targetSdkVersion 25
-        def VERSIONCODE = 6
+        targetSdkVersion 23
+        def VERSIONCODE = 7
         versionCode VERSIONCODE
-        versionName "1.0"
+        versionName "1.0.1"
         def RANDOM_BUILD_CODE = "\""+VERSIONCODE+"/"+String.format("%X", new Random().nextLong())+"\""
         buildConfigField "String", "RANDOM_BUILD_CODE", RANDOM_BUILD_CODE
     }
