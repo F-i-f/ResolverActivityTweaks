@@ -106,17 +106,9 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
         XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(resActClass, "onCreate", Bundle.class, Intent.class, CharSequence.class, int.class, Intent[].class, List.class, boolean.class),
                 new XC_MethodHook() {
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (isEnabled() && shouldHideAlwaysOnce()) {
-                            Button mAlwaysButton = (Button) mAlwaysButtonField.get(param.thisObject);
-                            if (mAlwaysButton != null) {
-                                mAlwaysButton.setVisibility(View.GONE);
-                            }
-
-                            Button mOnceButton = (Button) mOnceButtonField.get(param.thisObject);
-                            if (mOnceButton != null) {
-                                mOnceButton.setVisibility(View.GONE);
-                            }
+                            param.args[6] = false;
                         }
                     }
                 }
