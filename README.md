@@ -2,12 +2,12 @@
 
 ![Resolver Activity Tweaks banner: all three available styles](media/banner.png)
 
-Yes, it now works on EdXposed!™
+Yes, it now works on Pie with EdXposed!™
 
 ## Requirements:
 
-* Lollipop 5.0 or higher. Works on Lollipop, Marshmallow, Nougat and
-  Oreo.
+* Lollipop 5.0 or higher. Works on Lollipop, Marshmallow, Nougat, Oreo
+  and Pie.
 
 * An AOSP ROM.
 
@@ -77,6 +77,8 @@ Finally this is how the app looks:
 
 * Use [Remote Preferences](https://github.com/apsun/RemotePreferences),
   so that we don't depend on `MODE_WORLD_READABLE` ever again.
+* No reboots are needed anymore when changing settings on all Android
+  versions.
 
 ### 2.1 - February 26, 2019
 
