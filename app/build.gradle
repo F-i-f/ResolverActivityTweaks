@@ -1,5 +1,19 @@
 apply plugin: 'com.android.application'
 
+def getGitRevision = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return "<unknown git revision>";
+    }
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion '28.0.3'
@@ -8,11 +22,12 @@ android {
         applicationId "com.fifsource.android.resolveractivitytweaks"
         minSdkVersion 21
         targetSdkVersion 23
-        def VERSIONCODE = 8
+        def VERSIONCODE = 9
         versionCode VERSIONCODE
-        versionName "2.0"
+        versionName "2.1"
         def RANDOM_BUILD_CODE = "\""+VERSIONCODE+"/"+String.format("%X", new Random().nextLong())+"\""
         buildConfigField "String", "RANDOM_BUILD_CODE", RANDOM_BUILD_CODE
+        buildConfigField "String", "GIT_REVISION", "\""+getGitRevision()+"\""
     }
     buildTypes {
         release {
