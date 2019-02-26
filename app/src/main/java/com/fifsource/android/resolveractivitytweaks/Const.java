@@ -3,7 +3,7 @@ package com.fifsource.android.resolveractivitytweaks;
 /**
  * Created by phil on 10/1/15.
  */
-public class Const {
+class Const {
     public static final String[] XPOSED_INSTALLER_PACKAGE_NAMES = new String[] {
             "com.solohsu.android.edxp.manager",
             "de.robv.android.xposed.installer"
