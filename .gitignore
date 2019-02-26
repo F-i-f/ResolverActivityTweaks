@@ -1,6 +1,4 @@
-*~
-\#*#
-.#*
+# Stock
 *.iml
 .gradle
 /local.properties
@@ -14,3 +12,8 @@
 /build
 /captures
 .externalNativeBuild
+# Fif
+*~
+\#*#
+.#*
+*.backup
