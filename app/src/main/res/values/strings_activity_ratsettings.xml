@@ -21,17 +21,17 @@
 
     <string name="rat_copyright_title">@string/title_activity_ratsettings</string>
     <string name="rat_copyright_description">Copyright © 2015–2019 FifSource Inc.\nFif_ on XDA.\nTap to open the XDA Support Thread.</string>
-    <string name="rat_noxposed_summary">The Xposed Installer has not been detected. This app is useless without it.</string>
-    <string name="rat_noxposed_title">Xposed is not installed</string>
-    <string name="rat_noxposed_uninstall">Uninstall this app…</string>
-    <string name="rat_category_xposedinact">Xposed Module Not Active</string>
-    <string name="rat_xposedinact_activate">Activate the module…</string>
-    <string name="rat_xposedinact_summary">You may just have installed the app.\nOr you forgot to enable the module in the Xposed Installer.\nThis app is useless until you\'ve enabled the module AND rebooted afterwards.</string>
+    <string name="rat_no_xposed_summary">The Xposed Installer has not been detected. This app is useless without it.</string>
+    <string name="rat_no_xposed_title">Xposed is not installed</string>
+    <string name="rat_no_xposed_uninstall">Uninstall this app…</string>
+    <string name="rat_category_xposed_inactive">Xposed Module Not Active</string>
+    <string name="rat_xposed_inactive_activate">Activate the module…</string>
+    <string name="rat_xposed_inactive_summary">You may just have installed the app.\nOr you forgot to enable the module in the Xposed Installer.\nThis app is useless until you\'ve enabled the module AND rebooted afterwards.</string>
     <string name="rat_category_debug">Debugging</string>
     <string name="rat_build_code">Build Code</string>
     <string name="rat_git_revision">Git Revision</string>
-    <string name="rat_xposedmismatch_title">Reboot Needed</string>
-    <string name="rat_xposedmismatch_summary">The Xposed module has been updated and a reboot is needed.\nPlease reboot.</string>
+    <string name="rat_xposed_mismatch_title">Reboot Needed</string>
+    <string name="rat_xposed_mismatch_summary">The Xposed module has been updated and a reboot is needed.\nPlease reboot.</string>
 
     <string name="rat_error_browser_not_found">Browser not found.</string>
     <string name="rat_error_pm_not_found">Package Manager not found.</string>
