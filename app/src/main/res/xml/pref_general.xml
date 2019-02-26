@@ -5,41 +5,41 @@
         android:summary="@string/rat_copyright_description" />
 
     <PreferenceCategory
-        android:key="rat_category_noxposed"
-        android:title="@string/rat_noxposed_title">
+        android:key="rat_category_no_xposed"
+        android:title="@string/rat_no_xposed_title">
 
         <Preference
-            android:key="rat_noxposed_summary"
-            android:summary="@string/rat_noxposed_summary"
+            android:key="rat_no_xposed_summary"
+            android:summary="@string/rat_no_xposed_summary"
             android:selectable="false" />
 
         <Preference
-            android:key="rat_noxposed_uninstall"
-            android:title="@string/rat_noxposed_uninstall" />
+            android:key="rat_no_xposed_uninstall"
+            android:title="@string/rat_no_xposed_uninstall" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="rat_category_xposedinact"
-        android:title="@string/rat_category_xposedinact" >
+        android:key="rat_category_xposed_inactive"
+        android:title="@string/rat_category_xposed_inactive" >
 
         <Preference
-            android:key="rat_xposedinact_summary"
-            android:summary="@string/rat_xposedinact_summary"
+            android:key="rat_xposed_inactive_summary"
+            android:summary="@string/rat_xposed_inactive_summary"
             android:selectable="false" />
 
         <Preference
-            android:key="rat_xposedinact_activate"
-            android:title="@string/rat_xposedinact_activate" />
+            android:key="rat_xposed_inactive_activate"
+            android:title="@string/rat_xposed_inactive_activate" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="rat_category_xposedmismatch"
-        android:title="@string/rat_xposedmismatch_title" >
+        android:key="rat_category_xposed_mismatch"
+        android:title="@string/rat_xposed_mismatch_title" >
 
         <Preference
-            android:summary="@string/rat_xposedmismatch_summary"
+            android:summary="@string/rat_xposed_mismatch_summary"
             android:selectable="false"/>
 
     </PreferenceCategory>

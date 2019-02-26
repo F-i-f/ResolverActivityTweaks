@@ -26,38 +26,38 @@ import android.widget.ListView;
 
 public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
-    private XSharedPreferences mXprefs;
+    private XSharedPreferences mPreferences;
 
     private void reloadPrefs() {
         //noinspection ConstantConditions
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-                && mXprefs.hasFileChanged()) {
-            mXprefs.reload();
+                && mPreferences.hasFileChanged()) {
+            mPreferences.reload();
         }
     }
 
     private boolean isEnabled() {
         reloadPrefs();
-        return mXprefs.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+        return mPreferences.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
     }
 
     private boolean shouldHideAlwaysOnce() {
         reloadPrefs();
-        return mXprefs.getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
+        return mPreferences.getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
     }
 
     @SuppressWarnings("RedundantThrows")
     public void initZygote(StartupParam startupParam) throws Throwable {
         XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + ")");
-        mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
-        mXprefs.makeWorldReadable();
+        mPreferences = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
+        mPreferences.makeWorldReadable();
     }
 
     @SuppressWarnings("RedundantThrows")
-    public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+    public void handleLoadPackage(final LoadPackageParam param) throws Throwable {
 
-        if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
-            final Class prefActivityClass = XposedHelpers.findClass(BuildConfig.APPLICATION_ID+".RATSettings", lpparam.classLoader);
+        if (param.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            final Class prefActivityClass = XposedHelpers.findClass(BuildConfig.APPLICATION_ID+".RATSettings", param.classLoader);
             final Field mBuildCodeFromXposed = XposedHelpers.findField(prefActivityClass, "mBuildCodeFromXposed");
             XposedBridge.hookAllConstructors(prefActivityClass, new XC_MethodHook() {
                 @Override
@@ -68,7 +68,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
             });
         }
 
-        final Class rlaClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ResolveListAdapter", lpparam.classLoader);
+        final Class rlaClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ResolveListAdapter", param.classLoader);
         Field mListField_;
         try {
             // LP
@@ -102,7 +102,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
                 }
         );
 
-        final Class resActClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity", lpparam.classLoader);
+        final Class resActClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity", param.classLoader);
         XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(resActClass, "onCreate", Bundle.class, Intent.class, CharSequence.class, int.class, Intent[].class, List.class, boolean.class),
                 new XC_MethodHook() {
                     @SuppressWarnings("RedundantThrows")
@@ -141,7 +141,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
                 );
         } else {
             // MM
-            final Class itemClickClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ItemClickListener", lpparam.classLoader);
+            final Class itemClickClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ItemClickListener", param.classLoader);
             final Field mAdapterViewField = XposedHelpers.findField(resActClass, "mAdapterView");
             final Field itemClickClassParentField = XposedHelpers.findField(itemClickClass, "this$0"); // From http://c2.com/cgi/wiki?ReflectionOnInnerClasses
             XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(itemClickClass, "onItemClick", AdapterView.class, View.class, int.class, long.class),
