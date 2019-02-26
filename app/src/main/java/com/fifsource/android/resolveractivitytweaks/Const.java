@@ -4,8 +4,11 @@ package com.fifsource.android.resolveractivitytweaks;
  * Created by phil on 10/1/15.
  */
 public class Const {
-    public static final String XPOSED_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
-    public static final String XPOSED_INSTALLER_OPEN_SECTION = XPOSED_INSTALLER_PACKAGE_NAME + ".OPEN_SECTION";
+    public static final String[] XPOSED_INSTALLER_PACKAGE_NAMES = new String[] {
+            "com.solohsu.android.edxp.manager",
+            "de.robv.android.xposed.installer"
+    };
+    public static final String XPOSED_INSTALLER_OPEN_SECTION = ".OPEN_SECTION";
 
     public static final String  PREFERENCES_NAME = "prefs";
     public static final String  PREF_RAT_COPYRIGHT = "rat_copyright";
