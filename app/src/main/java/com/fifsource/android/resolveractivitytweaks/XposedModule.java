@@ -18,7 +18,6 @@
 package com.fifsource.android.resolveractivitytweaks;
 
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
@@ -29,47 +28,80 @@ import java.lang.CharSequence;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.crossbowffs.remotepreferences.RemotePreferences;
+
 public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
-    private XSharedPreferences mPreferences;
+    private boolean mInSettings;
+    private SharedPreferences mPreferences;
 
-    private void reloadPrefs() {
-        //noinspection ConstantConditions
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-                && mPreferences.hasFileChanged()) {
-            mPreferences.reload();
+    public XposedModule() {
+        mInSettings = false;
+        mPreferences = null;
+    }
+
+    private SharedPreferences getPreferences(XC_MethodHook.MethodHookParam param) throws Throwable {
+        if ( mPreferences == null ) {
+            Context ctx = getContext(param.thisObject);
+            if (mInSettings) {
+                mPreferences = ctx.getSharedPreferences(Const.PREFERENCES_NAME, Context.MODE_PRIVATE);
+            } else {
+                mPreferences = new RemotePreferences(ctx, Const.REMOTE_PREFERENCE_AUTHORITY, Const.PREFERENCES_NAME);
+            }
         }
+        return mPreferences;
     }
 
-    private boolean isEnabled() {
-        reloadPrefs();
-        return mPreferences.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
+    private boolean isEnabled(XC_MethodHook.MethodHookParam param) throws Throwable {
+        return getPreferences(param).getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
     }
 
-    private boolean shouldHideAlwaysOnce() {
-        reloadPrefs();
-        return mPreferences.getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
+    private boolean shouldHideAlwaysOnce(XC_MethodHook.MethodHookParam param) throws Throwable {
+        return getPreferences(param).getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
+    }
+
+    // Lifted from https://github.com/M66B/XPrivacyLua/blob/410ae46a051be7d7d8d87fab7c13b0680a6d22e2/app/src/main/java/eu/faircode/xlua/XLua.java
+    // Method of the same name in XPrivacyLua by @M66B.
+    @NonNull
+    private Context getContext(@NonNull Object am) throws Throwable {
+        // Searching for context
+        Context context = null;
+        Class<?> cAm = am.getClass();
+        while (cAm != null && context == null) {
+            for (Field field : cAm.getDeclaredFields())
+                if (field.getType().equals(Context.class)) {
+                    field.setAccessible(true);
+                    context = (Context) field.get(am);
+                    break;
+                }
+            cAm = cAm.getSuperclass();
+        }
+        if (context == null)
+            throw new Throwable("Context not found");
+
+        return context;
     }
 
     @SuppressWarnings("RedundantThrows")
     public void initZygote(StartupParam startupParam) throws Throwable {
         XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + ")");
-        mPreferences = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
-        mPreferences.makeWorldReadable();
     }
 
     @SuppressWarnings("RedundantThrows")
     public void handleLoadPackage(final LoadPackageParam param) throws Throwable {
 
         if (param.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            mInSettings = true;
             final Class prefActivityClass = XposedHelpers.findClass(BuildConfig.APPLICATION_ID+".RATSettings", param.classLoader);
             final Field mBuildCodeFromXposed = XposedHelpers.findField(prefActivityClass, "mBuildCodeFromXposed");
             XposedBridge.hookAllConstructors(prefActivityClass, new XC_MethodHook() {
@@ -97,7 +129,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
         XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(rlaClass, "rebuildList"), new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (isEnabled() && (Boolean)mFilterLastUsedField.get(param.thisObject)) {
+                        if (isEnabled(param) && (Boolean)mFilterLastUsedField.get(param.thisObject)) {
                             mFilterLastUsedField.set(param.thisObject, false);
                             if (mListField != null) {
                                 @SuppressWarnings("unchecked")
@@ -121,7 +153,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
                     @SuppressWarnings("RedundantThrows")
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (isEnabled() && shouldHideAlwaysOnce()) {
+                        if (isEnabled(param) && shouldHideAlwaysOnce(param)) {
                             param.args[6] = false;
                         }
                     }
@@ -144,7 +176,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
                         new XC_MethodHook() {
                             @Override
                             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                if (isEnabled() && shouldHideAlwaysOnce()) {
+                                if (isEnabled(param) && shouldHideAlwaysOnce(param)) {
                                     mLastSelectedField.set(param.thisObject,
                                             ((ListView) mListViewField.get(param.thisObject)).getCheckedItemPosition());
 
@@ -161,7 +193,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
                     new XC_MethodHook() {
                         @Override
                         protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            if (isEnabled() && shouldHideAlwaysOnce()) {
+                            if (isEnabled(param) && shouldHideAlwaysOnce(param)) {
                                 Object parentInstance = itemClickClassParentField.get(param.thisObject);
                                 mLastSelectedField.set(parentInstance,
                                         ((AbsListView) mAdapterViewField.get(parentInstance)).getCheckedItemPosition());

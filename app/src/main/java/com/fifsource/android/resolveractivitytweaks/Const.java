@@ -26,6 +26,7 @@ class Const {
     public static final String XPOSED_INSTALLER_OPEN_SECTION = ".OPEN_SECTION";
 
     public static final String  PREFERENCES_NAME = "prefs";
+    public static final String  REMOTE_PREFERENCE_AUTHORITY = BuildConfig.APPLICATION_ID + ".preferences";
     public static final String  PREF_RAT_COPYRIGHT = "rat_copyright";
     public static final String  PREF_RAT_CATEGORY_NO_XPOSED = "rat_category_no_xposed";
     public static final String  PREF_RAT_NO_XPOSED_UNINSTALL = "rat_no_xposed_uninstall";

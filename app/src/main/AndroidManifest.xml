@@ -58,6 +58,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </intent-filter>
         </activity-alias>
 
+        <provider
+            android:name=".RATRemotePreferences"
+            android:authorities="com.fifsource.android.resolveractivitytweaks.preferences"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+
     </application>
 
 </manifest>

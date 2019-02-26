@@ -2,7 +2,7 @@
 
 ![Resolver Activity Tweaks banner: all three available styles](media/banner.png)
 
-Yes, it now works on Oreo!™
+Yes, it now works on EdXposed!™
 
 ## Requirements:
 
@@ -11,7 +11,7 @@ Yes, it now works on Oreo!™
 
 * An AOSP ROM.
 
-* Xposed.
+* Xposed or EdXposed.
 
 ## Features:
 
@@ -59,10 +59,26 @@ Finally this is how the app looks:
 
 * Download from the [Xposed Modules
   Repository](https://repo.xposed.info/module/com.fifsource.android.resolveractivitytweaks).
+  
+## Credits
+
+* [Remote Preferences](https://github.com/apsun/RemotePreferences) java 
+  library from [Andrew Sun](https://github.com/apsun)
+
+* I copied the [`getContext()` method](https://github.com/M66B/XPrivacyLua/blob/410ae46a051be7d7d8d87fab7c13b0680a6d22e2/app/src/main/java/eu/faircode/xlua/XLua.java)
+  from [Marcel Bokhorst](https://github.com/M66B)'s
+  [XPrivacyLua](https://github.com/M66B/XPrivacyLua) project.
+
+* [Rovo89](https://github.com/rovo89) for [Xposed](https://github.com/rovo89/Xposed).
 
 ## Changelog
 
-### 2.1 — February 26, 2019
+### WIP
+
+* Use [Remote Preferences](https://github.com/apsun/RemotePreferences),
+  so that we don't depend on `MODE_WORLD_READABLE` ever again.
+
+### 2.1 - February 26, 2019
 
 * EdXposed compatibility.
 
@@ -71,7 +87,7 @@ Finally this is how the app looks:
 
 * Now on [GitHub](https://github.com/F-i-f/ResolverActivityTweaks).
 
-### 2.0 — August 24, 2018
+### 2.0 - August 24, 2018
 
 * Oreo Support.
 
@@ -81,12 +97,12 @@ Finally this is how the app looks:
   The code is now simpler, and should work across all supported
   Android releases.
 
-### 1.0.1 — October 11, 2017
+### 1.0.1 - October 11, 2017
 
 * SDK Version back to 23 (MM) as `MODE_WORLD_READABLE` was causing an
   app crash on Nougat.
 
-### 1.0 — October 11, 2017
+### 1.0 - October 11, 2017
 
 Cosmetic changes only.
 
@@ -105,11 +121,11 @@ news, version 0.4 was fine as well)
 
 * Log version in Xposed log file upon start-up.
 
-### 0.4 — April 3, 2016
+### 0.4 - April 3, 2016
 
 * Rebuilt against Xposed v81.
 
-### 0.3 — March 2, 2016
+### 0.3 - March 2, 2016
 
 * Marshmallow 6.0 compatibility.
 
@@ -118,14 +134,14 @@ news, version 0.4 was fine as well)
   change the setting on the fly, and no reboot is needed.
 
 
-### 0.2 — October 3, 2015
+### 0.2 - October 3, 2015
 
 * Lollipop 5.0 compatibility: Target SDK v21 instead of v22. Thanks to
   XDA's Curious Boy.
 
 * Fix FCs on CM12.1. Thanks to Alexey71 on XDA.
 
-### 0.1.1 — October 3, 2015
+### 0.1.1 - October 3, 2015
 
 * Fix FC on tablets and other large devices.
 
