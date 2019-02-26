@@ -82,6 +82,11 @@
             android:title="@string/rat_build_code"
             android:selectable="false" />
 
+        <Preference
+            android:key="rat_git_revision"
+            android:title="@string/rat_git_revision"
+            android:selectable="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

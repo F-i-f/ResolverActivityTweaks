@@ -214,6 +214,9 @@ public class RATSettings extends PreferenceActivity {
             Preference ratBuildCode = findPreference(Const.PREF_RAT_BUILD_CODE);
             ratBuildCode.setSummary(BuildConfig.RANDOM_BUILD_CODE);
 
+            Preference ratGitRevision = findPreference(Const.PREF_RAT_GIT_REVISION);
+            ratGitRevision.setSummary(BuildConfig.GIT_REVISION);
+
             final PackageManager pm = activity.getPackageManager();
             PackageInfo pkg = null;
             try {
