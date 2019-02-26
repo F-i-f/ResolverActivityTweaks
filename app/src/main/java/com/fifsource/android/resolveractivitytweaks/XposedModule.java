@@ -1,6 +1,6 @@
 package com.fifsource.android.resolveractivitytweaks;
 
-/**
+/*
  * Created by phil on 9/30/15.
  */
 
@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteInit {
@@ -30,28 +29,31 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
     private XSharedPreferences mXprefs;
 
     private void reloadPrefs() {
+        //noinspection ConstantConditions
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 && mXprefs.hasFileChanged()) {
             mXprefs.reload();
         }
     }
 
-    public boolean isEnabled() {
+    private boolean isEnabled() {
         reloadPrefs();
         return mXprefs.getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
     }
 
-    public boolean shouldHideAlwaysOnce() {
+    private boolean shouldHideAlwaysOnce() {
         reloadPrefs();
         return mXprefs.getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT);
     }
 
+    @SuppressWarnings("RedundantThrows")
     public void initZygote(StartupParam startupParam) throws Throwable {
         XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + ")");
         mXprefs = new XSharedPreferences(BuildConfig.APPLICATION_ID, Const.PREFERENCES_NAME);
         mXprefs.makeWorldReadable();
     }
 
+    @SuppressWarnings("RedundantThrows")
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 
         if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
@@ -67,7 +69,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
         }
 
         final Class rlaClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity$ResolveListAdapter", lpparam.classLoader);
-        Field mListField_ = null;
+        Field mListField_;
         try {
             // LP
             mListField_ = XposedHelpers.findField(rlaClass, "mList");
@@ -101,10 +103,9 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
         );
 
         final Class resActClass = XposedHelpers.findClass("com.android.internal.app.ResolverActivity", lpparam.classLoader);
-        final Field mAlwaysButtonField = XposedHelpers.findField(resActClass, "mAlwaysButton");
-        final Field mOnceButtonField = XposedHelpers.findField(resActClass, "mOnceButton");
         XposedBridge.hookMethod(XposedHelpers.findMethodBestMatch(resActClass, "onCreate", Bundle.class, Intent.class, CharSequence.class, int.class, Intent[].class, List.class, boolean.class),
                 new XC_MethodHook() {
+                    @SuppressWarnings("RedundantThrows")
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (isEnabled() && shouldHideAlwaysOnce()) {

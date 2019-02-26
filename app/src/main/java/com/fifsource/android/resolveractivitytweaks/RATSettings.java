@@ -1,5 +1,6 @@
 package com.fifsource.android.resolveractivitytweaks;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -21,7 +22,6 @@ import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class RATSettings extends PreferenceActivity {
 
-    public String mBuildCodeFromXposed = null;
+    private final String mBuildCodeFromXposed = null;
 
     public RATSettings() {
         // Empty
@@ -93,12 +93,12 @@ public class RATSettings extends PreferenceActivity {
      * to reflect its new value.
      */
     private static class ReflectInDescriptionBooleanPrefChangeListener implements Preference.OnPreferenceChangeListener {
-        private Activity mActivity;
-        private boolean mDelayedAfterReboot;
-        private int mOnDescrResId;
-        private int mOffDescrResId;
+        private final Activity mActivity;
+        private final boolean mDelayedAfterReboot;
+        private final int mOnDescrResId;
+        private final int mOffDescrResId;
 
-        public ReflectInDescriptionBooleanPrefChangeListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId) {
+        ReflectInDescriptionBooleanPrefChangeListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId) {
             mActivity = activity;
             mDelayedAfterReboot = delayedAfterReboot;
             mOnDescrResId = onDescrResId;
@@ -113,7 +113,7 @@ public class RATSettings extends PreferenceActivity {
             }
             return true;
         }
-        public void setDescriptionString(Preference preference, Object value) {
+        void setDescriptionString(Preference preference, Object value) {
             if ((Boolean) value) {
                 preference.setSummary(mOnDescrResId);
             } else {
@@ -123,8 +123,8 @@ public class RATSettings extends PreferenceActivity {
     }
 
     private static class ReflectInDescriptionListChangedListener implements Preference.OnPreferenceChangeListener {
-        private String[] mEntryValuesArray;
-        private String[] mEntryDescriptionArray;
+        private final String[] mEntryValuesArray;
+        private final String[] mEntryDescriptionArray;
 
         public ReflectInDescriptionListChangedListener(RATSettings activity, int entryValuesArrayId, int entryDescriptionArrayId) {
             Resources rsrc = activity.getResources();
@@ -138,7 +138,7 @@ public class RATSettings extends PreferenceActivity {
             return true;
         }
 
-        public void setDescriptionString(Preference preference, Object value) {
+        void setDescriptionString(Preference preference, Object value) {
             String stringVal = (String) value;
             int sz = mEntryValuesArray.length;
             int idx;
@@ -152,9 +152,9 @@ public class RATSettings extends PreferenceActivity {
     }
 
     private static class ToggleHideOnceAlwaysListener extends ReflectInDescriptionBooleanPrefChangeListener {
-        private Preference mDependentPreference;
+        private final Preference mDependentPreference;
 
-        public ToggleHideOnceAlwaysListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId, Preference dependentPreference) {
+        ToggleHideOnceAlwaysListener(Activity activity, boolean delayedAfterReboot, int onDescrResId, int offDescrResId, Preference dependentPreference) {
             super(activity, delayedAfterReboot, onDescrResId, offDescrResId);
             mDependentPreference = dependentPreference;
         }
@@ -165,7 +165,7 @@ public class RATSettings extends PreferenceActivity {
             return super.onPreferenceChange(preference, value);
         }
 
-        public void setDependentPreference(boolean value) {
+        void setDependentPreference(boolean value) {
             mDependentPreference.setEnabled(value);
         }
     }
@@ -181,6 +181,7 @@ public class RATSettings extends PreferenceActivity {
             // Empty
         }
 
+        @SuppressLint("WorldReadableFiles")
         @SuppressWarnings("deprecation")
         private void makePrefWorldReadable(PreferenceManager prefMgr) {
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
@@ -231,7 +232,7 @@ public class RATSettings extends PreferenceActivity {
             }
             final PackageInfo xposedInstPackage = xposedInstPackageTry;
 
-            ArrayList<Preference> sectionsToRemove = new ArrayList<Preference>();
+            ArrayList<Preference> sectionsToRemove = new ArrayList<>();
 
             if (xposedInstPackage == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
@@ -253,7 +254,8 @@ public class RATSettings extends PreferenceActivity {
                         return true;
                     }
                 });
-            } else if (activity.mBuildCodeFromXposed == null) {
+            } else //noinspection ConstantConditions
+                if (activity.mBuildCodeFromXposed == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NOXPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
 
@@ -318,8 +320,8 @@ public class RATSettings extends PreferenceActivity {
             showInLauncherPrefChangeListener.setDescriptionString(showInLauncherPref, showInLauncherPref.getSharedPreferences().getBoolean(Const.PREF_RAT_SHOW_LAUNCHER_ICON, Const.PREF_RAT_SHOW_LAUNCHER_ICON_DEFAULT));
 
             PreferenceScreen screen = getPreferenceScreen();
-            for (Iterator<Preference> i = sectionsToRemove.iterator(); i.hasNext();) {
-                screen.removePreference(i.next());
+            for (Preference aSectionsToRemove : sectionsToRemove) {
+                screen.removePreference(aSectionsToRemove);
             }
         }
     }
