@@ -41,7 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
         <activity
             android:name=".RATSettings"
-            android:label="@string/title_activity_ratsettings" >
+            android:label="@string/title_activity_rat_settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
@@ -51,7 +51,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <activity-alias
             android:name=".RATSettingsAlias"
             android:targetActivity=".RATSettings"
-            android:label="@string/title_activity_ratsettings" >
+            android:label="@string/title_activity_rat_settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
