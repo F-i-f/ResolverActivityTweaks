@@ -19,7 +19,6 @@ package com.fifsource.android.resolveractivitytweaks;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -110,14 +109,10 @@ public class RATSettings extends PreferenceActivity {
      * to reflect its new value.
      */
     private static class ReflectInDescriptionBooleanPrefChangeListener implements Preference.OnPreferenceChangeListener {
-        private final Activity mActivity;
-        private final boolean mDelayedAfterReboot;
         private final int mOnDescriptionResId;
         private final int mOffDescriptionResId;
 
-        ReflectInDescriptionBooleanPrefChangeListener(Activity activity, boolean delayedAfterReboot, int onDescriptionResId, int offDescriptionResId) {
-            mActivity = activity;
-            mDelayedAfterReboot = delayedAfterReboot;
+        ReflectInDescriptionBooleanPrefChangeListener(int onDescriptionResId, int offDescriptionResId) {
             mOnDescriptionResId = onDescriptionResId;
             mOffDescriptionResId = offDescriptionResId;
         }
@@ -125,9 +120,6 @@ public class RATSettings extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             setDescriptionString(preference, value);
-            if (mDelayedAfterReboot && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Toast.makeText(mActivity, mActivity.getString(R.string.rat_warning_setting_delayed_after_reboot), Toast.LENGTH_SHORT).show();
-            }
             return true;
         }
         void setDescriptionString(Preference preference, Object value) {
@@ -171,8 +163,8 @@ public class RATSettings extends PreferenceActivity {
     private static class ToggleHideOnceAlwaysListener extends ReflectInDescriptionBooleanPrefChangeListener {
         private final Preference mDependentPreference;
 
-        ToggleHideOnceAlwaysListener(Activity activity, boolean delayedAfterReboot, int onDescriptionResId, int offDescriptionResId, Preference dependentPreference) {
-            super(activity, delayedAfterReboot, onDescriptionResId, offDescriptionResId);
+        ToggleHideOnceAlwaysListener(int onDescriptionResId, int offDescriptionResId, Preference dependentPreference) {
+            super(onDescriptionResId, offDescriptionResId);
             mDependentPreference = dependentPreference;
         }
 
@@ -307,18 +299,18 @@ public class RATSettings extends PreferenceActivity {
 
             Preference ratEnabledPref = findPreference(Const.PREF_RAT_ENABLE);
             Preference hideOnceAlwaysPref = findPreference(Const.PREF_RAT_HIDE_ONCE_ALWAYS);
-            ToggleHideOnceAlwaysListener toggleHideOnceAlwaysListener = new ToggleHideOnceAlwaysListener(activity, true, R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
+            ToggleHideOnceAlwaysListener toggleHideOnceAlwaysListener = new ToggleHideOnceAlwaysListener(R.string.rat_enable_description_on, R.string.rat_enable_description_off, hideOnceAlwaysPref);
             ratEnabledPref.setOnPreferenceChangeListener(toggleHideOnceAlwaysListener);
             boolean enableVal = ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_ENABLE, Const.PREF_RAT_ENABLE_DEFAULT);
             toggleHideOnceAlwaysListener.setDescriptionString(ratEnabledPref, enableVal);
             toggleHideOnceAlwaysListener.setDependentPreference(enableVal);
 
-            ReflectInDescriptionBooleanPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(activity, true, R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
+            ReflectInDescriptionBooleanPrefChangeListener hideOnceAlwaysChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(R.string.rat_hideAlwaysOnce_description_on, R.string.rat_hideAlwaysOnce_description_off);
             hideOnceAlwaysPref.setOnPreferenceChangeListener(hideOnceAlwaysChangeListener);
             hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, ratEnabledPref.getSharedPreferences().getBoolean(Const.PREF_RAT_HIDE_ONCE_ALWAYS, Const.PREF_RAT_HIDE_ONCE_ALWAYS_DEFAULT));
 
             Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
-            ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(activity, false, R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
+            ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object value) {
                     RATSettings activity = (RATSettings)getActivity();
