@@ -30,7 +30,7 @@
         </activity>
 
         <activity-alias
-            android:name=".RATSettings-Alias"
+            android:name=".RATSettingsAlias"
             android:targetActivity=".RATSettings"
             android:label="@string/title_activity_ratsettings" >
             <intent-filter>

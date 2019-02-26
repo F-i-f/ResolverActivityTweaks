@@ -300,7 +300,7 @@ public class RATSettings extends PreferenceActivity {
                     } else {
                         val = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
                     }
-                    pm.setComponentEnabledSetting(new ComponentName(activity, BuildConfig.APPLICATION_ID+".RATSettings-Alias"), val, PackageManager.DONT_KILL_APP);
+                    pm.setComponentEnabledSetting(new ComponentName(activity, BuildConfig.APPLICATION_ID+".RATSettingsAlias"), val, PackageManager.DONT_KILL_APP);
                     return super.onPreferenceChange(preference, value);
                 }
             };
