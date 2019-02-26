@@ -218,15 +218,22 @@ public class RATSettings extends PreferenceActivity {
             ratGitRevision.setSummary(BuildConfig.GIT_REVISION);
 
             final PackageManager pm = activity.getPackageManager();
-            PackageInfo pkg = null;
-            try {
-                pkg = pm.getPackageInfo(Const.XPOSED_INSTALLER_PACKAGE_NAME, 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                // Nothing
+            PackageInfo xposedInstPackageTry = null;
+            for (int i=0, i_max = Const.XPOSED_INSTALLER_PACKAGE_NAMES.length; i < i_max; ++i) {
+                try {
+                    xposedInstPackageTry = pm.getPackageInfo(Const.XPOSED_INSTALLER_PACKAGE_NAMES[i], 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    // Nothing
+                }
+                if (xposedInstPackageTry != null) {
+                    break;
+                }
             }
+            final PackageInfo xposedInstPackage = xposedInstPackageTry;
+
             ArrayList<Preference> sectionsToRemove = new ArrayList<Preference>();
 
-            if (pkg == null) {
+            if (xposedInstPackage == null) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDINACT));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSEDMISMATCH));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
@@ -255,12 +262,12 @@ public class RATSettings extends PreferenceActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         try {
-                            Intent intent = new Intent(Const.XPOSED_INSTALLER_OPEN_SECTION);
+                            Intent intent = new Intent(xposedInstPackage.packageName + Const.XPOSED_INSTALLER_OPEN_SECTION);
                             intent.putExtra("section", "modules");
                             startActivity(intent);
                         } catch (ActivityNotFoundException e) {
                             try {
-                                Intent intent = pm.getLaunchIntentForPackage(Const.XPOSED_INSTALLER_PACKAGE_NAME);
+                                Intent intent = pm.getLaunchIntentForPackage(xposedInstPackage.packageName);
                                 startActivity(intent);
                             } catch (ActivityNotFoundException e2) {
                                 Toast.makeText(activity, activity.getString(R.string.rat_error_xposed_installer_not_found), Toast.LENGTH_LONG).show();
