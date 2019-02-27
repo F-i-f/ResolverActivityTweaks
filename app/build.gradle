@@ -40,9 +40,9 @@ android {
         minSdkVersion 21
         //noinspection OldTargetApi,ExpiredTargetSdkVersion
         targetSdkVersion 27
-        def VERSIONCODE = 9
+        def VERSIONCODE = 10
         versionCode VERSIONCODE
-        versionName "2.1"
+        versionName "3.0"
         def RANDOM_BUILD_CODE = "\""+VERSIONCODE+"/"+String.format("%X", new Random().nextLong())+"\""
         buildConfigField "String", "RANDOM_BUILD_CODE", RANDOM_BUILD_CODE
         buildConfigField "String", "GIT_REVISION", "\""+getGitRevision()+"\""

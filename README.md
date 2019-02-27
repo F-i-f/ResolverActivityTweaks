@@ -73,12 +73,18 @@ Finally this is how the app looks:
 
 ## Changelog
 
-### WIP
+### 3.0 - February 27, 2019
 
 * Use [Remote Preferences](https://github.com/apsun/RemotePreferences),
   so that we don't depend on `MODE_WORLD_READABLE` ever again.
+  
 * No reboots are needed anymore when changing settings on all Android
   versions.
+  
+* Added a license button in the preferences Legal sections, opening
+  to the GPLv3 in the GitHub repository.
+  
+* Now targeting Android SDK 27 (instead of 23).
 
 ### 2.1 - February 26, 2019
 
