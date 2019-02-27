@@ -103,8 +103,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
         <Preference
             android:key="rat_git_revision"
-            android:title="@string/rat_git_revision"
-            android:selectable="false" />
+            android:title="@string/rat_git_revision_title"
+            android:summary="@string/rat_git_revision_summary" />
 
     </PreferenceCategory>
 

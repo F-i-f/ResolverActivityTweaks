@@ -196,6 +196,21 @@ public class RATSettings extends PreferenceActivity {
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
         }
 
+        private void openBrowserOnClick(Preference pref, final String url) {
+            pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final RATSettings activity = (RATSettings) getActivity();
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(activity, activity.getString(R.string.rat_error_browser_not_found), Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+            });
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -209,23 +224,14 @@ public class RATSettings extends PreferenceActivity {
 
             Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
             ratCopyright.setTitle(ratCopyright.getTitle() + " " + BuildConfig.VERSION_NAME);
-            ratCopyright.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.xda_support_thread_link))));
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, activity.getString(R.string.rat_error_browser_not_found), Toast.LENGTH_LONG).show();
-                    }
-                    return true;
-                }
-            });
+            openBrowserOnClick(ratCopyright, activity.getString(R.string.xda_support_thread_link));
 
             Preference ratBuildCode = findPreference(Const.PREF_RAT_BUILD_CODE);
             ratBuildCode.setSummary(BuildConfig.RANDOM_BUILD_CODE);
 
             Preference ratGitRevision = findPreference(Const.PREF_RAT_GIT_REVISION);
-            ratGitRevision.setSummary(BuildConfig.GIT_REVISION);
+            ratGitRevision.setSummary(BuildConfig.GIT_REVISION+"\n"+ratGitRevision.getSummary());
+            openBrowserOnClick(ratGitRevision, activity.getString(R.string.github_project_link));
 
             final PackageManager pm = activity.getPackageManager();
             PackageInfo xposedInstPackageTry = null;
