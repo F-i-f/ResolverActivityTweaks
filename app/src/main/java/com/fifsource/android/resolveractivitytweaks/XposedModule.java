@@ -94,7 +94,7 @@ public class XposedModule implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @SuppressWarnings("RedundantThrows")
     public void initZygote(StartupParam startupParam) throws Throwable {
-        XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + ")");
+        XposedBridge.log("RAT: Starting ResolverActivityTweaks v. " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + "), git " + BuildConfig.GIT_REVISION);
     }
 
     @SuppressWarnings("RedundantThrows")
