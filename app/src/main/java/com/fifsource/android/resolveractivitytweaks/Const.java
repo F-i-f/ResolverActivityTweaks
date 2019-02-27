@@ -43,5 +43,6 @@ class Const {
     public static final boolean PREF_RAT_SHOW_LAUNCHER_ICON_DEFAULT = true;
     public static final String  PREF_RAT_BUILD_CODE = "rat_build_code";
     public static final String  PREF_RAT_GIT_REVISION = "rat_git_revision";
+    public static final String  PREF_RAT_LICENSE = "rat_license";
 
 }

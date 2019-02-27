@@ -56,6 +56,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <string name="rat_error_browser_not_found">Browser not found.</string>
     <string name="rat_error_pm_not_found">Package Manager not found.</string>
     <string name="rat_error_xposed_installer_not_found">Xposed Installer not found.</string>
+    <string name="rat_license_title">License</string>
+    <string name="rat_license_summary">GPLv3\nTap to open full terms.</string>
     <string name="rat_warranty_disclaimer_title">Disclaimer of Warranty</string>
     <string name="rat_warranty_disclaimer_summary">There is NO WARRANTY for the program, to the extent permitted by applicable law. The copyright holders and/or other parties provide the program "as is" WITHOUT WARRANTY OF ANY KIND, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose.  The entire risk as to the quality and performance of the program is with you.</string>
     <string name="rat_liability_disclaimer_title">Limitation of Liability</string>

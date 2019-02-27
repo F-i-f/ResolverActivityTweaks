@@ -233,6 +233,8 @@ public class RATSettings extends PreferenceActivity {
             ratGitRevision.setSummary(BuildConfig.GIT_REVISION+"\n"+ratGitRevision.getSummary());
             openBrowserOnClick(ratGitRevision, activity.getString(R.string.github_project_link));
 
+            openBrowserOnClick(findPreference(Const.PREF_RAT_LICENSE), activity.getString(R.string.license_link));
+
             final PackageManager pm = activity.getPackageManager();
             PackageInfo xposedInstPackageTry = null;
             for (int i=0, i_max = Const.XPOSED_INSTALLER_PACKAGE_NAMES.length; i < i_max; ++i) {
