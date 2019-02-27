@@ -190,12 +190,6 @@ public class RATSettings extends PreferenceActivity {
             // Empty
         }
 
-        @SuppressLint("WorldReadableFiles")
-        @SuppressWarnings("deprecation")
-        private void makePrefWorldReadable(PreferenceManager prefMgr) {
-            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
-        }
-
         private void openBrowserOnClick(Preference pref, final String url) {
             pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -219,7 +213,6 @@ public class RATSettings extends PreferenceActivity {
 
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
-            makePrefWorldReadable(prefMgr);
             addPreferencesFromResource(R.xml.pref_general);
 
             Preference ratCopyright = findPreference(Const.PREF_RAT_COPYRIGHT);
