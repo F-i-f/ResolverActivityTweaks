@@ -5,6 +5,7 @@ git:
 branches:
   only:
     - master
+    - coverity_scan
 
 language: android
 
@@ -12,3 +13,20 @@ android:
   components:
     - build-tools-28.0.3
     - android-27
+
+env:
+  global:
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    secure: "otYF+tVYD1nFB84JoMBTQdvZA/KZMXyJFtsZKH+ImryFi/X9QhqQm4ZSOSjoZOrbCUDfmu/RA3yHZPgItEjENUGdOxZ0NWsWt2wbJUqS7eV+EuqIHVlw2fPY/hCRDIaunzAMMQ25f7q/ovNyab6wxEenLl1iWysWHqso5Mwt/Ta8cUIxPu4xj/I638YE44jsSJql9XT82UxEZAk1uCYcQlQqkjA5ofFODTXQktf1p6C4AUJom7IL8C6MAjQwXrYzoifWL1ItXJfRGZcJrHC/KbPaHruTa4q9kddVed6evgmNXR7b5KOrlsnueJnDfXRjbBvUn+uKQEGx3Y6KiCM2TSKieu18ZXuZijCN50iTgsqQUy+EozrKwKKZVmBfhQOJ3r2MscwOcym+8WFFDRDZW1ajx1cCYyXtzaCJHHt2bhwUjNRKBx2AiP7mtv/lqjKmz5M/b8YnlCjksGjjAO/fEVXAKcDkJ6F17CPvb1M8l7OzfgLfSGW/sZS9mLaS2kWaMYtCbVz7lfiv0fupSrCEe/LBbSW3WwohQ38+e3hEC9EKtW0x7e6wLEn9rGih32JKMsJf4Rnhngb5Ys3ubp7QGHTqglfbaCHPe/Tu3CYwNvdo9PSqX2MWIVAJXwYSmEZx2D6W5Stje3U/IeYppDcS7hQ+23o5wYnCDc7qQK6IJSI="
+
+before_install:
+
+addons:
+  coverity_scan:
+    project:
+      name: "F-i-f/ResolverActivityTweaks"
+      description: "Xposed module to change the look and feel of the Android Resolver Activity dialog."
+    notification_email: phil+github@fifi.org
+    build_command: "./gradlew assemble"
+    branch_pattern: coverity_scan
