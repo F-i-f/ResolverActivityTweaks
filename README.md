@@ -1,5 +1,9 @@
 # Resolver Activity Tweaks
 
+Master: [![Build Status](https://travis-ci.org/F-i-f/ResolverActivityTweaks.svg?branch=master)](https://travis-ci.org/F-i-f/ResolverActivityTweaks)
+
+Coverity: [![Build Status](https://travis-ci.org/F-i-f/ResolverActivityTweaks.svg?branch=coverity_scan)](https://travis-ci.org/F-i-f/ResolverActivityTweaks) [![Coverity Scan Build Status](https://scan.coverity.com/projects/18447/badge.svg)](https://scan.coverity.com/projects/f-i-f-ResolverActivityTweaks)
+
 ![Resolver Activity Tweaks banner: all three available styles](media/banner.png)
 
 Yes, it now works on Pie with EdXposed!™
