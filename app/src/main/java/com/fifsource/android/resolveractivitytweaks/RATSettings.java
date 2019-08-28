@@ -209,6 +209,10 @@ public class RATSettings extends PreferenceActivity {
             super.onCreate(savedInstanceState);
 
             final RATSettings activity = (RATSettings) getActivity();
+            if (activity == null) {
+                // Don't do squat if for whatever reason getActivity() fails.
+                return;
+            }
 
             PreferenceManager prefMgr = getPreferenceManager();
             prefMgr.setSharedPreferencesName(Const.PREFERENCES_NAME);
