@@ -77,6 +77,16 @@ Finally this is how the app looks:
 
 ## Changelog
 
+### 3.1 - August 28, 2019
+
+* Handle [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager) 
+  in addition to [EdXposed Installer](https://github.com/solohsu/XposedInstaller),
+  for latest versions of EdXposed.
+
+* Bump Xposed API from 81 to 82.
+
+* Support Travis & Coverity in GitHub repo. 
+
 ### 3.0 - February 27, 2019
 
 * Use [Remote Preferences](https://github.com/apsun/RemotePreferences),
