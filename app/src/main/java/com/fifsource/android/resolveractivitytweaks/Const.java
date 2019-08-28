@@ -21,6 +21,7 @@ class Const {
     @SuppressWarnings("SpellCheckingInspection")
     static final String[] XPOSED_INSTALLER_PACKAGE_NAMES = new String[] {
             "com.solohsu.android.edxp.manager",
+            "org.meowcat.edxposed.manager",
             "de.robv.android.xposed.installer"
     };
     static final String XPOSED_INSTALLER_OPEN_SECTION = ".OPEN_SECTION";
