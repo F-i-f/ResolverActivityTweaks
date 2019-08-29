@@ -17,13 +17,31 @@
 
 package com.fifsource.android.resolveractivitytweaks;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 class Const {
-    @SuppressWarnings("SpellCheckingInspection")
-    static final String[] XPOSED_INSTALLER_PACKAGE_NAMES = new String[] {
-            "com.solohsu.android.edxp.manager",
-            "org.meowcat.edxposed.manager",
-            "de.robv.android.xposed.installer"
-    };
+    static class XposedModuleManagerPackageName {
+        final public String packageName;
+        final public String appName;
+        XposedModuleManagerPackageName(String packageName_, String appName_) {
+            packageName = packageName_;
+            appName = appName_;
+        }
+    }
+
+    static final List<XposedModuleManagerPackageName> XPOSED_INSTALLER_PACKAGE_NAMES = Collections.unmodifiableList(new ArrayList<XposedModuleManagerPackageName>() {
+        {
+            //noinspection SpellCheckingInspection
+            add(new XposedModuleManagerPackageName("com.solohsu.android.edxp.manager", "EdXposed Manager"));
+            //noinspection SpellCheckingInspection
+            add(new XposedModuleManagerPackageName("org.meowcat.edxposed.manager", "EdXposed Installer"));
+            //noinspection SpellCheckingInspection
+            add(new XposedModuleManagerPackageName("de.robv.android.xposed.installer", "Xposed Installer"));
+        }
+    });
+
     static final String XPOSED_INSTALLER_OPEN_SECTION = ".OPEN_SECTION";
 
     static final String  PREFERENCES_NAME = "prefs";

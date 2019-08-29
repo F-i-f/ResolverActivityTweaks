@@ -238,22 +238,23 @@ public class RATSettings extends PreferenceActivity {
             openBrowserOnClick(findPreference(Const.PREF_RAT_LICENSE), activity.getString(R.string.license_link));
 
             PackageInfo xposedInstPackageTry = null;
+            String xposedInstNameTry = null;
             final PackageManager pm = activity.getPackageManager();
             if (pm == null) {
                 Log.e(LOG_TAG, "onCreate(): getPackageManager() returned null");
             } else {
-                for (int i = 0, i_max = Const.XPOSED_INSTALLER_PACKAGE_NAMES.length; i < i_max; ++i) {
+                for (Const.XposedModuleManagerPackageName managerInfo : Const.XPOSED_INSTALLER_PACKAGE_NAMES) {
                     try {
-                        xposedInstPackageTry = pm.getPackageInfo(Const.XPOSED_INSTALLER_PACKAGE_NAMES[i], 0);
+                        xposedInstPackageTry = pm.getPackageInfo(managerInfo.packageName, 0);
+                        xposedInstNameTry = managerInfo.appName;
+                        break;
                     } catch (PackageManager.NameNotFoundException e) {
                         // Nothing
-                    }
-                    if (xposedInstPackageTry != null) {
-                        break;
                     }
                 }
             }
             final PackageInfo xposedInstPackage = xposedInstPackageTry;
+            final String xposedInstName = xposedInstNameTry;
 
             ArrayList<Preference> sectionsToRemove = new ArrayList<>();
 
