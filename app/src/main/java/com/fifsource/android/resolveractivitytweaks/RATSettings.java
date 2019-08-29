@@ -55,7 +55,7 @@ import java.util.List;
 public class RATSettings extends PreferenceActivity {
 
     private final String mBuildCodeFromXposed = null;
-    protected static final String LOG_TAG = "ResolverActivityTweaks";
+    private static final String LOG_TAG = "ResolverActivityTweaks";
 
     public RATSettings() {
         // Empty
