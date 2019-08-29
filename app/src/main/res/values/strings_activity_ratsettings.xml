@@ -40,7 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <string name="rat_copyright_title">@string/title_activity_rat_settings</string>
     <string name="rat_copyright_description">Copyright © 2015–2019 FifSource Inc.\nFif_ on XDA.\nTap to open the XDA Support Thread.</string>
-    <string name="rat_no_xposed_summary">The Xposed Installer has not been detected. This app is useless without it.</string>
+    <string name="rat_no_xposed_summary">Neither the Xposed Installer, EdXposed Installer nor EdXposed Manager have been detected. An Xposed module manager is required.  If using another Xposed module manager than the three listed, please contact the developer on the XDA thread or by creating a GitHub issue.</string>
     <string name="rat_no_xposed_title">Xposed is not installed</string>
     <string name="rat_no_xposed_uninstall">Uninstall this app…</string>
     <string name="rat_category_xposed_inactive">Xposed Module Not Active</string>
