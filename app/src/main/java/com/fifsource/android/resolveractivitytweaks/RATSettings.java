@@ -211,6 +211,8 @@ public class RATSettings extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+            Log.i(LOG_TAG, "ResolverActivityTweaks Preferences " + BuildConfig.VERSION_NAME + " (" + BuildConfig.RANDOM_BUILD_CODE + "), git " + BuildConfig.GIT_REVISION);
+
             final RATSettings activity = (RATSettings) getActivity();
             if (activity == null) {
                 // Don't do squat if for whatever reason getActivity() fails.
