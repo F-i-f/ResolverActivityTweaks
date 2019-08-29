@@ -349,7 +349,7 @@ public class RATSettings extends PreferenceActivity {
                     } else {
                         PackageManager pm = activity.getPackageManager();
                         if (pm == null) {
-                            Log.e(LOG_TAG, "onPreferenceChange(): getPackagetManager() is null");
+                            Log.e(LOG_TAG, "onPreferenceChange(): getPackageManager() is null");
                         } else {
                             int val;
                             if ((Boolean) value) {
