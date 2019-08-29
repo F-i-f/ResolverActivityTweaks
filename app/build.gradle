@@ -33,7 +33,7 @@ def getGitRevision = { ->
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "com.fifsource.android.resolveractivitytweaks"
