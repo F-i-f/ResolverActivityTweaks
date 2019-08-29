@@ -111,12 +111,37 @@ public class RATSettings extends PreferenceActivity {
      * to reflect its new value.
      */
     private static class ReflectInDescriptionBooleanPrefChangeListener implements Preference.OnPreferenceChangeListener {
-        private final int mOnDescriptionResId;
-        private final int mOffDescriptionResId;
+        private final int    mOnDescriptionResId;
+        private final String mOnDescriptionString;
+        private final int    mOffDescriptionResId;
+        private final String mOffDescriptionString;
 
         ReflectInDescriptionBooleanPrefChangeListener(int onDescriptionResId, int offDescriptionResId) {
             mOnDescriptionResId = onDescriptionResId;
+            mOnDescriptionString = null;
             mOffDescriptionResId = offDescriptionResId;
+            mOffDescriptionString = null;
+        }
+
+        ReflectInDescriptionBooleanPrefChangeListener(String onDescriptionString, int offDescriptionResId) {
+            mOnDescriptionResId = -1;
+            mOnDescriptionString = onDescriptionString;
+            mOffDescriptionResId = offDescriptionResId;
+            mOffDescriptionString = null;
+        }
+
+        ReflectInDescriptionBooleanPrefChangeListener(int onDescriptionResId, String offDescriptionString) {
+            mOnDescriptionResId = onDescriptionResId;
+            mOnDescriptionString = null;
+            mOffDescriptionResId = -1;
+            mOffDescriptionString = offDescriptionString;
+        }
+
+        ReflectInDescriptionBooleanPrefChangeListener(String onDescriptionString, String offDescriptionString) {
+            mOnDescriptionResId = -1;
+            mOnDescriptionString = onDescriptionString;
+            mOffDescriptionResId = -1;
+            mOffDescriptionString = offDescriptionString;
         }
 
         @Override
@@ -126,9 +151,17 @@ public class RATSettings extends PreferenceActivity {
         }
         void setDescriptionString(Preference preference, Object value) {
             if ((Boolean) value) {
-                preference.setSummary(mOnDescriptionResId);
+                if (mOnDescriptionString != null) {
+                    preference.setSummary(mOnDescriptionString);
+                } else {
+                    preference.setSummary(mOnDescriptionResId);
+                }
             } else {
-                preference.setSummary(mOffDescriptionResId);
+                if (mOffDescriptionString != null) {
+                    preference.setSummary(mOffDescriptionString);
+                } else {
+                    preference.setSummary(mOffDescriptionResId);
+                }
             }
         }
     }
