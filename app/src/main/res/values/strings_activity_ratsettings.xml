@@ -45,7 +45,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <string name="rat_no_xposed_uninstall">Uninstall this app…</string>
     <string name="rat_category_xposed_inactive">Xposed Module Not Active</string>
     <string name="rat_xposed_inactive_activate">Activate the module…</string>
-    <string name="rat_xposed_inactive_summary">You may just have installed the app.\nOr you forgot to enable the module in the Xposed Installer.\nThis app is useless until you\'ve enabled the module AND rebooted afterwards.</string>
+    <string name="rat_xposed_inactive_summary">You may just have installed the app.\nOr you forgot to enable the module in the %s.\nThis app is useless until you\'ve enabled the module AND rebooted afterwards.</string>
     <string name="rat_category_debug">Debugging</string>
     <string name="rat_build_code">Build Code</string>
     <string name="rat_git_revision_title">Git Revision</string>

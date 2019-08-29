@@ -50,6 +50,7 @@ class Const {
     static final String  PREF_RAT_CATEGORY_NO_XPOSED = "rat_category_no_xposed";
     static final String  PREF_RAT_NO_XPOSED_UNINSTALL = "rat_no_xposed_uninstall";
     static final String  PREF_RAT_CATEGORY_XPOSED_INACTIVE = "rat_category_xposed_inactive";
+    static final String  PREF_RAT_XPOSED_INACTIVE_SUMMARY = "rat_xposed_inactive_summary";
     static final String  PREF_RAT_XPOSED_INACTIVE_ACTIVATE = "rat_xposed_inactive_activate";
     static final String  PREF_RAT_CATEGORY_XPOSED_MISMATCH = "rat_category_xposed_mismatch";
     static final String  PREF_RAT_CATEGORY_XPOSED = "rat_category_xposed";

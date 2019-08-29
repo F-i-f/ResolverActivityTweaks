@@ -284,6 +284,9 @@ public class RATSettings extends PreferenceActivity {
                     sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED_MISMATCH));
                     sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
 
+                    Preference inactiveXposedSummaryPref = findPreference(Const.PREF_RAT_XPOSED_INACTIVE_SUMMARY);
+                    inactiveXposedSummaryPref.setSummary(String.format(activity.getString(R.string.rat_xposed_inactive_summary), xposedInstName));
+
                     Preference activateModulePref = findPreference(Const.PREF_RAT_XPOSED_INACTIVE_ACTIVATE);
                     activateModulePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
