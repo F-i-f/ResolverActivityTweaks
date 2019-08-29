@@ -21,7 +21,7 @@ def getGitRevision = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'rev-parse', 'HEAD'
+            commandLine 'git', 'describe', '--tags', '--long', '--always'
             standardOutput = stdout
         }
         return stdout.toString().trim()
