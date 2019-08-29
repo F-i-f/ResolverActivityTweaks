@@ -279,11 +279,12 @@ public class RATSettings extends PreferenceActivity {
                 });
             } else //noinspection ConstantConditions
                 if (activity.mBuildCodeFromXposed == null) {
-                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NO_XPOSED));
-                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED_MISMATCH));
+                    sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NO_XPOSED));
+                    sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED_MISMATCH));
+                    sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
 
-                Preference activateModulePref = findPreference(Const.PREF_RAT_XPOSED_INACTIVE_ACTIVATE);
-                activateModulePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    Preference activateModulePref = findPreference(Const.PREF_RAT_XPOSED_INACTIVE_ACTIVATE);
+                    activateModulePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         try {
@@ -305,6 +306,7 @@ public class RATSettings extends PreferenceActivity {
             } else if (!activity.mBuildCodeFromXposed.equals(BuildConfig.RANDOM_BUILD_CODE)) {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NO_XPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED_INACTIVE));
+                sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED));
             } else {
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_NO_XPOSED));
                 sectionsToRemove.add(findPreference(Const.PREF_RAT_CATEGORY_XPOSED_INACTIVE));
