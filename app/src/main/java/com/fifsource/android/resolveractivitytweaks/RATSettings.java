@@ -385,7 +385,9 @@ public class RATSettings extends PreferenceActivity {
             hideOnceAlwaysChangeListener.setDescriptionString(hideOnceAlwaysPref, hideOnceAlwaysVal);
 
             Preference showInLauncherPref = findPreference(Const.PREF_RAT_SHOW_LAUNCHER_ICON);
-            ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(R.string.rat_showLauncher_description_on, R.string.rat_showLauncher_description_off) {
+            ReflectInDescriptionBooleanPrefChangeListener showInLauncherPrefChangeListener = new ReflectInDescriptionBooleanPrefChangeListener(R.string.rat_showLauncher_description_on,
+                                                                                                                                               String.format(activity.getString(R.string.rat_showLauncher_description_off),
+                                                                                                                                                             xposedInstName)) {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object value) {
                     RATSettings activity = (RATSettings)getActivity();
