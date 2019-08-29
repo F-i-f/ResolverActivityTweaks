@@ -288,17 +288,26 @@ public class RATSettings extends PreferenceActivity {
                     activateModulePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
+                        boolean launchedOk = false;
                         try {
                             Intent intent = new Intent(xposedInstPackage.packageName + Const.XPOSED_INSTALLER_OPEN_SECTION);
                             intent.putExtra("section", "modules");
                             startActivity(intent);
+                            launchedOk = true;
                         } catch (ActivityNotFoundException e) {
                             try {
                                 Intent intent = pm.getLaunchIntentForPackage(xposedInstPackage.packageName);
-                                startActivity(intent);
+                                if (intent != null) {
+                                    startActivity(intent);
+                                    launchedOk = true;
+                                }
                             } catch (ActivityNotFoundException e2) {
-                                Toast.makeText(activity, activity.getString(R.string.rat_error_xposed_installer_not_found), Toast.LENGTH_LONG).show();
+                                // Empty
                             }
+                        }
+                        if ( ! launchedOk ) {
+                            Toast.makeText(activity, String.format(activity.getString(R.string.rat_error_launching_xposed_installer),
+                                                                   xposedInstName), Toast.LENGTH_LONG).show();
                         }
                         return true;
                     }

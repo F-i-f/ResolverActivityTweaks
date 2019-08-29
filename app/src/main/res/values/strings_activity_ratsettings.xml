@@ -55,7 +55,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <string name="rat_error_browser_not_found">Browser not found.</string>
     <string name="rat_error_pm_not_found">Package Manager not found.</string>
-    <string name="rat_error_xposed_installer_not_found">Xposed Installer not found.</string>
+    <string name="rat_error_launching_xposed_installer">Cannot launch the %s.</string>
     <string name="rat_license_title">License</string>
     <string name="rat_license_summary">GPLv3\nTap to open full terms.</string>
     <string name="rat_warranty_disclaimer_title">Disclaimer of Warranty</string>
