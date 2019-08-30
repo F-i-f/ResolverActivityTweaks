@@ -77,6 +77,26 @@ Finally this is how the app looks:
 
 ## Changelog
 
+### 3.2 - August 30, 2019
+
+* Updated Android build stack (Studio, Build Tools, Gradle).
+
+* Shows which Xposed module manager is used at various places around the
+  UI.  One of Xposed Installer, EdXposed Installer or EdXposed Manager.
+
+* Fixed rare crash when launching an Xposed module manager when the
+  module is disabled.
+
+* Fixed Coverity-detected rare error conditions.
+
+* Hide the module controls when the module is inactive and when UI and
+  module versions do not match.  Since now settings can be changed on the
+  fly, revert back to the 1.x behavior.
+
+* Typos and wording changes in the UI.  Shows short git revision.
+
+* Added logcat debugging.
+
 ### 3.1 - August 28, 2019
 
 * Handle [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager) 
